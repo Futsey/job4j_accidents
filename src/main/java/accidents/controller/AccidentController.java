@@ -7,11 +7,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class IndexController {
+@RequiredArgsConstructor
+public class AccidentController {
 
-    @GetMapping("/index")
+    private final AccidentService accidentService;
+
+    @GetMapping("/accidents")
     public String index(Model model) {
-        model.addAttribute("user", "Andrew Petrushin");
+        model.addAttribute("accidents", accidentService.findAllInTestList());
+        System.out.println(accidentService.findAllInTestList());
         return "index";
     }
 }
