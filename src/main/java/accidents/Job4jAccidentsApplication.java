@@ -1,4 +1,4 @@
-package com.example.job4j_accidents;
+package accidents;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
