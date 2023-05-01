@@ -19,5 +19,10 @@
         <div th:text="${user}"></div>
     </div>
 
+    <div th:each="accident : ${accidents}">
+        <span th:href="@{'/accidents/' + ${accident.id}}" th:text="|${accident.id}. ${accident.name}. ${accident.text}. ${accident.address}.|">Accident</span>
+    </div>
+
+
 </body>
 </html>
