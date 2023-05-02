@@ -26,7 +26,29 @@
         </div>
     </nav>
 
-MAIN PAGE
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="accident: ${accidents}">
+                    <td>
+                        <a th:href="@{|/formUpdateAccident?id=${accident.id}|}">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <span th:text="${accident.name}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>

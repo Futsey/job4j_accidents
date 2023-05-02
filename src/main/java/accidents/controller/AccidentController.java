@@ -57,4 +57,10 @@ public class AccidentController {
         }
         return rsl;
     }
+
+    @GetMapping("/formUpdateAccident")
+    public String update(@RequestParam("id") int id, Model model) {
+        model.addAttribute("accident", accidentService.findById(id).get());
+        return "/accidents/update";
+    }
 }
