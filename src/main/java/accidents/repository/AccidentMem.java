@@ -63,22 +63,23 @@ public class AccidentMem {
         return accidents.get(accidentId);
     }
 
-    public Accident put(Accident accident) {
+    public Accident save(Accident accident) {
         int tmpId = count.getAndIncrement();
         accident.setId(tmpId);
-        Accident tmpAccident = accidents.put(tmpId, accident);
-        return tmpAccident;
+        return accidents.put(tmpId, accident);
     }
 
-    public Accident update(Accident accident) {
-        return accidents.put(accident.getId(), Accident.builder()
-                .id(accident.getId())
-                .name(accident.getName())
-                .address(accident.getAddress())
-                .text(accident.getText())
-                .accidentType(accident.getAccidentType())
-                .rules(accident.getRules())
-                .build());
+    public boolean update(Accident accident) {
+        return accidents.computeIfPresent(accident.getId(),
+                (key, oldAccident) ->
+                        Accident.builder()
+                                .id(oldAccident.getId())
+                                .name(oldAccident.getName())
+                                .address(oldAccident.getAddress())
+                                .text(oldAccident.getText())
+                                .accidentType(oldAccident.getAccidentType())
+                                .rules(oldAccident.getRules())
+                                .build()) != null;
     }
 
     /* Как вариант с проверкой на null

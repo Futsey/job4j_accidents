@@ -47,7 +47,7 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
         String rsl = "redirect:/accidents";
-        if (!accidentService.create(accident)) {
+        if (!accidentService.save(accident)) {
             String[] ids = req.getParameterValues("rIds");
             rsl = "/createFail";
         }
@@ -63,7 +63,6 @@ public class AccidentController {
         } else {
             rsl = "/editFail";
         }
-
         return rsl;
     }
 

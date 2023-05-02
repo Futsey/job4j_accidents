@@ -22,11 +22,11 @@ public class AccidentService {
         return Optional.ofNullable(accidentMem.findById(accidentId));
     }
 
-    public boolean create(Accident accident) {
+    public boolean save(Accident accident) {
         var rsl = false;
         if (accident != null) {
             Optional<Accident> nonNullAccident = Optional.of(accident);
-            accidentMem.put(nonNullAccident.get());
+            accidentMem.save(nonNullAccident.get());
             rsl = true;
         }
         return rsl;
