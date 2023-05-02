@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,14 +25,18 @@ public class AccidentController {
     }
 
     @GetMapping("/createAccident")
-    public String viewCreateAccident() {
+    public String viewCreateAccident(Model model) {
+        model.addAttribute("accident", new Accident());
         return "/accidents/createAccident";
     }
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident) {
-        accidentService.create(accident);
-        return "redirect:/accidents";
+        String rsl = "redirect:/accidents";
+        if (!accidentService.create(accident)) {
+            rsl = "/createFail";
+        }
+        return rsl;
     }
 
     @GetMapping("/edit/{id}")

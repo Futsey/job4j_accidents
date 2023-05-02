@@ -10,6 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Repository
 public class AccidentMem {
 
+    private final AtomicInteger count = new AtomicInteger(4);
+
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
     public AccidentMem() {
@@ -34,7 +36,7 @@ public class AccidentMem {
     }
 
     public List<Accident> findAll() {
-        return new LinkedList<>(accidents.values());
+        return new ArrayList<>(accidents.values());
     }
 
     public Accident findById(Integer accidentId) {
@@ -42,16 +44,19 @@ public class AccidentMem {
     }
 
     public Accident put(Accident accident) {
-        return accidents.put(accident.getId(), accident);
+        int tmpId = count.getAndIncrement();
+        accident.setId(tmpId);
+        Accident tmpAccident = accidents.put(tmpId, accident);
+        return tmpAccident;
     }
 
     public Accident update(Accident accident) {
-        return Accident.builder()
+        return accidents.put(accident.getId(), Accident.builder()
                 .id(accident.getId())
                 .name(accident.getName())
                 .address(accident.getAddress())
                 .text(accident.getText())
-                .build();
+                .build());
     }
 
     /* Как вариант с проверкой на null
