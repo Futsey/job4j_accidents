@@ -14,8 +14,8 @@ public class AccidentController {
 
     @GetMapping("/accidents")
     public String index(Model model) {
-        model.addAttribute("accidents", accidentService.findAllInTestList());
-        System.out.println(accidentService.findAllInTestList());
+        model.addAttribute("accidents", accidentService.findAll());
+        System.out.println(accidentService.findAll());
         return "index";
     }
 }
