@@ -15,14 +15,18 @@
 </head>
 <body>
 
-    <div class="container">
-        <div th:text="${user}"></div>
-    </div>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" th:href="@{/index}">Главная</a>
+                <a class="nav-item nav-link" th:href="@{/accidents}">Инциденты</a>
+                <a class="nav-item nav-link active" th:href="@{/accidents/createAccident}">Добавить Инцидент</a>
+            </div>
+        </div>
+    </nav>
 
-    <div th:each="accident : ${accidents}">
-        <span th:href="@{'/accidents/' + ${accident.id}}" th:text="|${accident.id}. ${accident.name}. ${accident.text}. ${accident.address}.|">Accident</span>
-    </div>
-
-
+MAIN PAGE
+</div>
 </body>
 </html>
