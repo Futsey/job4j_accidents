@@ -55,7 +55,7 @@ public class AccidentController {
     }
 
     @GetMapping("/edit/{id}")
-    public String formUpdateTask(Model model, @PathVariable("id") int id) {
+    public String formUpdateAccident(Model model, /*@PathVariable("id") int id,*/ @RequestParam("id") int id) {
         String rsl = "/accidents/editAccident";
         Optional<Accident> accidentInDB = accidentService.findById(id);
         if (!accidentInDB.isEmpty()) {
@@ -67,17 +67,11 @@ public class AccidentController {
     }
 
     @PostMapping("/update")
-    public String editTask(@ModelAttribute Accident accident) {
+    public String editAccident(@ModelAttribute Accident accident) {
         String rsl = "redirect:/accidents";
         if (!accidentService.update(accident)) {
             rsl = "/editFail";
         }
         return rsl;
-    }
-
-    @GetMapping("/formUpdateAccident")
-    public String update(@RequestParam("id") int id, Model model) {
-        model.addAttribute("accident", accidentService.findById(id).get());
-        return "accident/update";
     }
 }
