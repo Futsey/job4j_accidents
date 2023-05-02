@@ -3,6 +3,7 @@ package accidents.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "accidents_accident")
@@ -23,4 +24,6 @@ public class Accident {
     private String address;
 
     private AccidentType accidentType;
+
+    private Set<Rule> rules;
 }

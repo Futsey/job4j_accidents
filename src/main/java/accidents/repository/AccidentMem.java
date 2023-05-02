@@ -2,6 +2,7 @@ package accidents.repository;
 
 import accidents.model.Accident;
 import accidents.model.AccidentType;
+import accidents.model.Rule;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -24,6 +25,9 @@ public class AccidentMem {
                 .accidentType(AccidentType.builder()
                         .name("Auto and parking")
                         .build())
+                .rules(Set.of(Rule.builder()
+                        .name("1.1.1 Parking rule")
+                        .build()))
                 .build());
         accidents.put(2, Accident.builder()
                 .id(2)
@@ -33,6 +37,9 @@ public class AccidentMem {
                 .accidentType(AccidentType.builder()
                         .name("PDD")
                         .build())
+                .rules(Set.of(Rule.builder()
+                        .name("1.1.2 Traffic lite rule")
+                        .build()))
                 .build());
         accidents.put(3, Accident.builder()
                 .id(3)
@@ -42,6 +49,9 @@ public class AccidentMem {
                 .accidentType(AccidentType.builder()
                         .name("Auto and pedestrian")
                         .build())
+                .rules(Set.of(Rule.builder()
+                        .name("1.1.3 Crosswalk rule")
+                        .build()))
                 .build());
     }
 
@@ -67,6 +77,7 @@ public class AccidentMem {
                 .address(accident.getAddress())
                 .text(accident.getText())
                 .accidentType(accident.getAccidentType())
+                .rules(accident.getRules())
                 .build());
     }
 
