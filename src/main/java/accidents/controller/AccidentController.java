@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -20,7 +18,6 @@ public class AccidentController {
     @GetMapping()
     public String showAll(Model model) {
         model.addAttribute("accidents", accidentService.findAll());
-        accidentService.findAll();
         return "/accidents/accidents";
     }
 
@@ -41,9 +38,15 @@ public class AccidentController {
 
     @GetMapping("/edit/{id}")
     public String formUpdateTask(Model model, @PathVariable("id") int id) {
+        String rsl = "/accidents/editAccident";
         Optional<Accident> accidentInDB = accidentService.findById(id);
-        accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
-        return "/accidents/editAccident";
+        if (!accidentInDB.isEmpty()) {
+            model.addAttribute("accident", accidentInDB.get());
+        } else {
+            rsl = "/editFail";
+        }
+
+        return rsl;
     }
 
     @PostMapping("/update")
