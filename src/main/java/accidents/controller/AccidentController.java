@@ -42,9 +42,10 @@ public class AccidentController {
     }
 
     @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
+    public String save(@ModelAttribute Accident accident, HttpServletRequest req, Model model) {
         String rsl = "redirect:/accidents";
         if (accidentService.save(accident).isEmpty()) {
+            model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";
         }
         String[] ids = req.getParameterValues("rIds");
