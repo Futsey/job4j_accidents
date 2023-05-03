@@ -48,7 +48,7 @@ public class AccidentController {
     public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
         String rsl = "redirect:/accidents";
         if (accidentService.save(accident).isEmpty()) {
-            rsl = "/accidents/createFail";
+            rsl = "/accidents/fail";
         }
         String[] ids = req.getParameterValues("rIds");
         return rsl;
