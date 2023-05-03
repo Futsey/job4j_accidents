@@ -1,6 +1,7 @@
 package accidents.service;
 
 import accidents.model.Accident;
+import accidents.model.AccidentType;
 import accidents.repository.AccidentMem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,10 @@ public class AccidentService {
 
     public List<Accident> findAll() {
         return accidentMem.findAll();
+    }
+
+    public List<AccidentType> findAllTypes() {
+        return accidentMem.findAllTypes();
     }
 
     public Optional<Accident> findById(Integer accidentId) {

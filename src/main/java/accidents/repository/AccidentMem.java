@@ -15,6 +15,10 @@ public class AccidentMem {
     private final AtomicInteger count = new AtomicInteger(4);
 
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
+    private final Map<Integer, AccidentType> accidentTypes = Map.of(
+            1, new AccidentType(1, "Две машины"),
+            2, new AccidentType(2, "Машина и человек"),
+            3, new AccidentType(3, "Машина и велосипед"));
 
     public AccidentMem() {
         accidents.put(1, Accident.builder()
@@ -22,9 +26,7 @@ public class AccidentMem {
                 .name("Parking")
                 .address("Pushkina 1")
                 .text("Wrong parking")
-                .accidentType(AccidentType.builder()
-                        .name("Auto and parking")
-                        .build())
+                .accidentType(accidentTypes.get(1))
                 .rules(Set.of(Rule.builder()
                         .name("1.1.1 Parking rule")
                         .build()))
@@ -34,9 +36,7 @@ public class AccidentMem {
                 .name("Traffic lite")
                 .address("Lenina 24")
                 .text("Run on red light")
-                .accidentType(AccidentType.builder()
-                        .name("PDD")
-                        .build())
+                .accidentType(accidentTypes.get(2))
                 .rules(Set.of(Rule.builder()
                         .name("1.1.2 Traffic lite rule")
                         .build()))
@@ -46,9 +46,7 @@ public class AccidentMem {
                 .name("Crosswalk")
                 .address("Pushkina 1")
                 .text("Didn't miss a pedestrian")
-                .accidentType(AccidentType.builder()
-                        .name("Auto and pedestrian")
-                        .build())
+                .accidentType(accidentTypes.get(3))
                 .rules(Set.of(Rule.builder()
                         .name("1.1.3 Crosswalk rule")
                         .build()))
@@ -59,13 +57,19 @@ public class AccidentMem {
         return new ArrayList<>(accidents.values());
     }
 
+    public List<AccidentType> findAllTypes() {
+        return new ArrayList<>(accidentTypes.values());
+    }
+
     public Accident findById(Integer accidentId) {
+
         return accidents.get(accidentId);
     }
 
     public Accident save(Accident accident) {
         int tmpId = count.getAndIncrement();
         accident.setId(tmpId);
+
         return accidents.put(tmpId, accident);
     }
 
@@ -81,4 +85,6 @@ public class AccidentMem {
                                 .rules(oldAccident.getRules())
                                 .build()) != null;
     }
+
+
 }
