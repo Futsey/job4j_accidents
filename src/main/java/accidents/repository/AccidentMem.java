@@ -63,10 +63,14 @@ public class AccidentMem {
         return accidents.get(accidentId);
     }
 
-    public Accident save(Accident accident) {
+    public Accident save(Optional<Accident> accident) {
         int tmpId = count.getAndIncrement();
-        accident.setId(tmpId);
-        return accidents.put(tmpId, accident);
+        Accident tmpAccident = new Accident();
+        if (accident.isPresent()) {
+            tmpAccident = accident.get();
+            tmpAccident.setId(tmpId);
+        }
+        return accidents.put(tmpId, tmpAccident);
     }
 
     public boolean update(Accident accident) {

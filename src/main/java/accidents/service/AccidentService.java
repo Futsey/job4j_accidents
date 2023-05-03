@@ -26,7 +26,7 @@ public class AccidentService {
         var rsl = false;
         if (accident != null) {
             Optional<Accident> nonNullAccident = Optional.of(accident);
-            accidentMem.save(nonNullAccident.get());
+            accidentMem.save(nonNullAccident);
             rsl = true;
         }
         return rsl;
