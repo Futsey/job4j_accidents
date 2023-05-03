@@ -20,6 +20,8 @@ public class AccidentMem {
             2, new AccidentType(2, "Машина и человек"),
             3, new AccidentType(3, "Машина и велосипед"));
 
+
+
     public AccidentMem() {
         accidents.put(1, Accident.builder()
                 .id(1)
@@ -57,19 +59,17 @@ public class AccidentMem {
         return new ArrayList<>(accidents.values());
     }
 
-    public List<AccidentType> findAllTypes() {
-        return new ArrayList<>(accidentTypes.values());
+    public List<Accident> findAllTypes() {
+        return new ArrayList<Accident>(accidents.values());
     }
 
     public Accident findById(Integer accidentId) {
-
         return accidents.get(accidentId);
     }
 
     public Accident save(Accident accident) {
         int tmpId = count.getAndIncrement();
         accident.setId(tmpId);
-
         return accidents.put(tmpId, accident);
     }
 
@@ -85,6 +85,4 @@ public class AccidentMem {
                                 .rules(oldAccident.getRules())
                                 .build()) != null;
     }
-
-
 }

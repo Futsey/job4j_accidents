@@ -1,18 +1,16 @@
 package accidents.controller;
 
 import accidents.model.Accident;
-import accidents.model.AccidentType;
 import accidents.model.Rule;
 import accidents.service.AccidentService;
+import accidents.service.RuleService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,6 +18,7 @@ import java.util.Optional;
 public class AccidentController {
 
     private final AccidentService accidentService;
+    private final RuleService ruleService;
 
     @GetMapping()
     public String showAll(Model model) {
@@ -29,13 +28,9 @@ public class AccidentController {
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> types = accidentService.findAllTypes();
+        List<Accident> types = accidentService.findAllTypes();
         model.addAttribute("types", types);
-        List<Rule> rules = List.of(
-                new Rule(1, "Статья. 1"),
-                new Rule(2, "Статья. 2"),
-                new Rule(3, "Статья. 3")
-        );
+        List<Rule> rules = ruleService.findAllRules();
         model.addAttribute("rules", rules);
         model.addAttribute("accident", new Accident());
         return "/accidents/createAccident";
@@ -44,11 +39,13 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, HttpServletRequest req, Model model) {
         String rsl = "redirect:/accidents";
+        String[] ids = req.getParameterValues("rIds");
+        accident.setRules(new HashSet<>(ruleService.findRequiredRules(ids)));
         if (accidentService.save(accident).isEmpty()) {
             model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";
         }
-        String[] ids = req.getParameterValues("rIds");
+
         return rsl;
     }
 

@@ -1,13 +1,11 @@
 package accidents.service;
 
 import accidents.model.Accident;
-import accidents.model.AccidentType;
 import accidents.repository.AccidentMem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +17,7 @@ public class AccidentService {
         return accidentMem.findAll();
     }
 
-    public List<AccidentType> findAllTypes() {
+    public List<Accident> findAllTypes() {
         return accidentMem.findAllTypes();
     }
 
