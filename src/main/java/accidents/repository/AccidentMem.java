@@ -63,14 +63,10 @@ public class AccidentMem {
         return accidents.get(accidentId);
     }
 
-    public Accident save(Optional<Accident> accident) {
+    public Accident save(Accident accident) {
         int tmpId = count.getAndIncrement();
-        Accident tmpAccident = new Accident();
-        if (accident.isPresent()) {
-            tmpAccident = accident.get();
-            tmpAccident.setId(tmpId);
-        }
-        return accidents.put(tmpId, tmpAccident);
+        accident.setId(tmpId);
+        return accidents.put(tmpId, accident);
     }
 
     public boolean update(Accident accident) {
@@ -85,11 +81,4 @@ public class AccidentMem {
                                 .rules(oldAccident.getRules())
                                 .build()) != null;
     }
-
-    /* Как вариант с проверкой на null
-    public List<Accident> findAllOptional() {
-        Optional<Map<Integer, Accident>> optionalMap = Optional.ofNullable(accidents);
-        return optionalMap.isPresent() ? new LinkedList<Accident>(optionalMap.get().values()) : Collections.emptyList();
-    }
-     */
 }

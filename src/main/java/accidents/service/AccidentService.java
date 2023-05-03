@@ -22,14 +22,8 @@ public class AccidentService {
         return Optional.ofNullable(accidentMem.findById(accidentId));
     }
 
-    public boolean save(Accident accident) {
-        var rsl = false;
-        if (accident != null) {
-            Optional<Accident> nonNullAccident = Optional.of(accident);
-            accidentMem.save(nonNullAccident);
-            rsl = true;
-        }
-        return rsl;
+    public Optional<Accident> save(Accident accident) {
+        return Optional.ofNullable(accidentMem.save(accident));
     }
 
     public boolean update(Accident accident) {
