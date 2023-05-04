@@ -1,8 +1,10 @@
 package accidents.controller;
 
 import accidents.model.Accident;
+import accidents.model.AccidentType;
 import accidents.model.Rule;
 import accidents.service.AccidentService;
+import accidents.service.AccidentTypeService;
 import accidents.service.RuleService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ public class AccidentController {
 
     private final AccidentService accidentService;
     private final RuleService ruleService;
+    private final AccidentTypeService accidentTypeService;
+
 
     @GetMapping()
     public String showAll(Model model) {
@@ -28,7 +32,7 @@ public class AccidentController {
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<Accident> types = accidentService.findAllTypes();
+        List<AccidentType> types = accidentTypeService.findAll();
         model.addAttribute("types", types);
         List<Rule> rules = ruleService.findAllRules();
         model.addAttribute("rules", rules);
@@ -40,12 +44,10 @@ public class AccidentController {
     public String save(@ModelAttribute Accident accident, HttpServletRequest req, Model model) {
         String rsl = "redirect:/accidents";
         String[] ids = req.getParameterValues("rIds");
-        accident.setRules(new HashSet<>(ruleService.findRequiredRules(ids)));
-        if (accidentService.save(accident).isEmpty()) {
+        if (accidentService.save(accident, ids).isEmpty()) {
             model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";
         }
-
         return rsl;
     }
 
