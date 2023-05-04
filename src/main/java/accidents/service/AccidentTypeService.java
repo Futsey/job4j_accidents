@@ -18,7 +18,9 @@ public class AccidentTypeService {
         return accidentTypeMem.findAll();
     }
 
-    public Optional<AccidentType> findById(int id) {
-        return Optional.ofNullable(accidentTypeMem.findById(id));
+    public Optional<AccidentType> findById(String id) {
+        Optional.ofNullable(accidentTypeMem.findByTypeId(Integer.parseInt(id)));
+        System.out.println();
+        return Optional.ofNullable(accidentTypeMem.findByTypeId(Integer.parseInt(id)));
     }
 }

@@ -19,12 +19,17 @@ public class AccidentTypeMem {
         accidentTypes.put(3, new AccidentType(3, "Машина и велосипед"));
     }
 
-
     public List<AccidentType> findAll() {
-        return new ArrayList<AccidentType>(accidentTypes.values());
+        return new ArrayList<>(accidentTypes.values());
     }
 
-    public AccidentType findById(int id) {
-        return accidentTypes.get(id);
+    public AccidentType findByTypeId(int id) {
+        List<AccidentType> types = findAll();
+        AccidentType accidentType = types.stream()
+                .filter(idFound -> idFound.getId() == id)
+                .findFirst()
+                .orElseThrow();
+        System.out.println(accidentType);
+        return accidentType;
     }
 }

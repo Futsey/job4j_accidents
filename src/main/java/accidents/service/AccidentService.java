@@ -1,7 +1,6 @@
 package accidents.service;
 
 import accidents.model.Accident;
-import accidents.model.AccidentType;
 import accidents.repository.AccidentMem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,10 +23,9 @@ public class AccidentService {
         return Optional.ofNullable(accidentMem.findById(accidentId));
     }
 
-    public Optional<Accident> save(Accident accident, String[] ids) {
-        accident.setRules(new HashSet<>(ruleService.findRequiredRules(ids)));
-        Optional<AccidentType> type = accidentTypeService.findById(accident.getAccidentType().getId());
-        type.ifPresent(accident::setAccidentType);
+    public Optional<Accident> save(Accident accident, String[] ids, String accidentId) {
+        accident.setRules(new HashSet<>(ruleService.findRequiredRules(ids).get()));
+        accident.setAccidentType(accidentTypeService.findById(accidentId).get());
         return Optional.ofNullable(accidentMem.save(accident));
     }
 

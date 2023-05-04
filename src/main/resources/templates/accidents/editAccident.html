@@ -38,24 +38,49 @@
         <th scope="col">Адрес</th>
       </tr>
       </thead>
-
-      <form th:action="@{/accidents/update}" method="POST" enctype="multipart/form-data" th:object="${accident}">
-        <td>
-          <input type="text" name="id" th:field="*{id}"/>
-        </td>
-        <td>
-          <input type="text" name="name" id="name" th:field="*{name}">
-        </td>
-        <td>
-          <input type="text" name="text" id="text" th:field="*{text}">
-        </td>
-        <td>
-          <input type="text" name="address" id="address" th:field="*{address}">
-        </td>
-        <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
-        </form>
-    </table>
-
+        <div class="row pt-3">
+          <div class="card" style="width: 100%">
+            <div class="card-header">
+              Новый инцидент
+            </div>
+            <div class="card-body">
+              <form th:action="@{/accidents/update}" method="POST" enctype="multipart/form-data"  th:object="${accident}">
+                <input type="hidden" name="id" th:field="*{id}"/>
+                <div class="form-group">
+                  <label for="name">Имя</label>
+                  <input type="text" class="form-control" name="name" id="name">
+                </div>
+                <div class="form-group">
+                  <label for="text">Текст</label>
+                  <input type="text" class="form-control" name="text" id="text">
+                </div>
+                <div class="form-group">
+                  <label for="address">Адрес</label>
+                  <input type="text" class="form-control" name="address" id="address">
+                </div>
+                <div class="form-group">
+                  <label for="type.id">Тип</label>
+                  <select class="form-control" id="type.id"  name="type.id">
+                    <option th:each="accidentType: ${accidentTypes}"
+                            th:text="${accidentType.name}"
+                            th:value="${accidentType.id}"></option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="type.id">Статья</label>
+                  <select class="form-control" id="rIds" name="rIds" multiple>
+                    <option th:each="rule: ${rules}"
+                            th:text="${rule.name}"
+                            th:value="${rule.id}"></option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </thread>
+      </table>
 
 </div>
 </body>

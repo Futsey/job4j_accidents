@@ -59,7 +59,8 @@ public class AccidentMem {
     public Accident save(Accident accident) {
         int tmpId = count.getAndIncrement();
         accident.setId(tmpId);
-        return accidents.put(tmpId, accident);
+        accidents.put(tmpId, accident);
+        return accidents.get(tmpId);
     }
 
     public boolean update(Accident accident) {

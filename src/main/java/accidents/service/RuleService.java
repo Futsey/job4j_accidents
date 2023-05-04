@@ -5,8 +5,10 @@ import accidents.repository.RuleMem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,16 +16,8 @@ public class RuleService {
 
     private final RuleMem ruleMem;
 
-    public List<Rule> findRequiredRules(String[] ids) {
-        List<Rule> filledRulesList = ruleMem.findAll();
-        List<Rule> rulesToReturn = new ArrayList<>();
-        for (int i = 0; i < ids.length; i++) {
-            String found = filledRulesList.get(i).getName();
-            if (found.equals(ids[i])) {
-                rulesToReturn.add(filledRulesList.get(i));
-            }
-        }
-        return rulesToReturn;
+    public Optional<List<Rule>> findRequiredRules(String[] ids) {
+        return Optional.ofNullable(ruleMem.findRequiredRules(ids));
     }
 
     public List<Rule> findAllRules() {

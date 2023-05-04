@@ -28,7 +28,25 @@
 
 </div>
 <div th:each="accident : ${accidents}">
-  <a th:href="@{'/accidents/edit/' + ${accident.id}}" th:text="|${accident.id}. ${accident.name}. ${accident.text}. ${accident.address}.|">Accident</a>
+  <a th:href="@{'/accidents/edit/' + ${accident.id}}" th:text="|${accident.id}. ${accident.name}. ${accident.text}. ${accident.address}. ${accident.accidentType}. ${accident.rules}.|">Accident</a>
+</div>
+
+<div>
+  <table class="table table-hover table-bordered border-primary">
+    <thead>
+    <tr  class="table-active">
+      <th scope="col" class="text-center">#</th>
+      <th scope="col" class="text-center">Имя</th>
+      <th scope="col" class="text-center">Текст</th>
+      <th scope="col" class="text-center">Адрес</th>
+      <th scope="col" class="text-center">Тип</th>
+      <th scope="col" class="text-center">Правило</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
 </div>
 
 </body>

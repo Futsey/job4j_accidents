@@ -30,10 +30,17 @@ public class AccidentController {
         return "/accidents/accidents";
     }
 
+    @GetMapping("/info/{id}")
+    public String formTaskInfo(Model model, @PathVariable("id") int id) {
+        Optional<Accident> accidentInMem = accidentService.findById(id);
+        accidentInMem.ifPresent(accident -> model.addAttribute("accident", accident));
+        return "/accidents/info";
+    }
+
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> types = accidentTypeService.findAll();
-        model.addAttribute("types", types);
+        List<AccidentType> accidentTypes = accidentTypeService.findAll();
+        model.addAttribute("accidentTypes", accidentTypes);
         List<Rule> rules = ruleService.findAllRules();
         model.addAttribute("rules", rules);
         model.addAttribute("accident", new Accident());
@@ -44,14 +51,16 @@ public class AccidentController {
     public String save(@ModelAttribute Accident accident, HttpServletRequest req, Model model) {
         String rsl = "redirect:/accidents";
         String[] ids = req.getParameterValues("rIds");
-        if (accidentService.save(accident, ids).isEmpty()) {
+        String[] accidentId = req.getParameterValues("type.id");
+        Optional<Accident> optAcc = accidentService.save(accident, ids, accidentId[0]);
+        if (optAcc.isEmpty()) {
             model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";
         }
         return rsl;
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit")
     public String formUpdateAccident(Model model, /*@PathVariable("id") int id,*/ @RequestParam("id") int id) {
         String rsl = "/accidents/editAccident";
         Optional<Accident> accidentInDB = accidentService.findById(id);
