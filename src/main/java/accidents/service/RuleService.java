@@ -15,8 +15,8 @@ public class RuleService {
 
     private final RuleMem ruleMem;
 
-    public Optional<Set<Rule>> findRequiredRules(String[] ids) {
-        return Optional.ofNullable(ruleMem.findRequiredRules(ids));
+    public Set<Rule> findRequiredRules(String[] ids) {
+        return ruleMem.findRequiredRules(ids);
     }
 
     public List<Rule> findAllRules() {
