@@ -1,10 +1,10 @@
 package accidents.repository;
 
 import accidents.model.Rule;
-import org.apache.logging.log4j.message.Message;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class RuleMem {
@@ -21,15 +21,10 @@ public class RuleMem {
         return new ArrayList<>(rules.values());
     }
 
-    public List<Rule> findRequiredRules(String[] ids) {
-        List<Rule> rules = findAll();
-        List<Rule> resultList = new ArrayList<>();
-        for (String idToFind : ids) {
-            resultList.add(rules.stream()
-                    .filter(id -> id.getId() == Integer.parseInt(idToFind))
-                    .findFirst()
-                    .orElseThrow());
-        }
-        return resultList;
+    public Set<Rule> findRequiredRules(String[] ids) {
+        return Arrays
+                .stream(ids)
+                .map(id -> rules.get(Integer.parseInt(id)))
+                .collect(Collectors.toSet());
     }
 }

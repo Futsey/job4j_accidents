@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +15,7 @@ public class RuleService {
 
     private final RuleMem ruleMem;
 
-    public Optional<List<Rule>> findRequiredRules(String[] ids) {
+    public Optional<Set<Rule>> findRequiredRules(String[] ids) {
         return Optional.ofNullable(ruleMem.findRequiredRules(ids));
     }
 

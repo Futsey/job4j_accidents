@@ -24,7 +24,7 @@ public class AccidentService {
     }
 
     public Optional<Accident> save(Accident accident, String[] ids) {
-        accident.setRules(new HashSet<>(ruleService.findRequiredRules(ids).get()));
+        accident.setRules(ruleService.findRequiredRules(ids).get());
         accident.setAccidentType(accidentTypeService.findById(accident.getAccidentType().getId()).get());
         return Optional.ofNullable(accidentMem.save(accident));
     }
