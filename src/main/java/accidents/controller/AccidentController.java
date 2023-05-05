@@ -51,8 +51,7 @@ public class AccidentController {
     public String save(@ModelAttribute Accident accident, HttpServletRequest req, Model model) {
         String rsl = "redirect:/accidents";
         String[] ids = req.getParameterValues("rIds");
-        String[] accidentId = req.getParameterValues("type.id");
-        Optional<Accident> optAcc = accidentService.save(accident, ids, accidentId[0]);
+        Optional<Accident> optAcc = accidentService.save(accident, ids);
         if (optAcc.isEmpty()) {
             model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";

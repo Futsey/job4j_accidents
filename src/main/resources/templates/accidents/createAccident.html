@@ -45,15 +45,15 @@
             <input type="text" class="form-control" name="address" id="address">
           </div>
           <div class="form-group">
-            <label for="type.id">Тип</label>
-            <select class="form-control" id="type.id"  name="type.id">
+            <label for="accidentType.id">Тип</label>
+            <select class="form-control" id="accidentType.id"  name="accidentType.id">
               <option th:each="accidentType: ${accidentTypes}"
                       th:text="${accidentType.name}"
                       th:value="${accidentType.id}"></option>
             </select>
           </div>
           <div class="form-group">
-            <label for="type.id">Статья</label>
+            <label for="rIds">Статья</label>
             <select class="form-control" id="rIds" name="rIds" multiple>
               <option th:each="rule: ${rules}"
                       th:text="${rule.name}"
