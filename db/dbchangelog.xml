@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog
+        <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
@@ -8,6 +8,13 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+        <include file="scripts/001_ddl_create_accidents_types_table.sql" relativeToChangelogFile="true"/>
+        <include file="scripts/002_ddl_create_accidents_rules_table.sql" relativeToChangelogFile="true"/>
+        <include file="scripts/003_dml_insert_accidents_rules.sql" relativeToChangelogFile="true"/>
+        <include file="scripts/004_dml_insert_accidents_types.sql" relativeToChangelogFile="true"/>
+        <include file="scripts/005_ddl_create_accidents_table.sql" relativeToChangelogFile="true"/>
+        <include file="scripts/006_dml_insert_accidents.sql" relativeToChangelogFile="true"/>
 
 
 </databaseChangeLog>

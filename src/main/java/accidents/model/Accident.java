@@ -23,7 +23,11 @@ public class Accident {
     private String text;
     private String address;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accident_type_id")
     private AccidentType accidentType;
 
+    @OneToMany
+    @JoinColumn(name = "accident_rule_id")
     private Set<Rule> rules;
 }

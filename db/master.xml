@@ -6,5 +6,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+    <include file="scripts/001_ddl_create_accidents_types_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/002_ddl_create_accidents_rules_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/003_dml_insert_accidents_rules.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/004_dml_insert_accidents_types.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/005_ddl_create_accidents_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/006_dml_insert_accidents.sql" relativeToChangelogFile="true"/>
+
 
 </databaseChangeLog>
