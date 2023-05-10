@@ -7,14 +7,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "accidents_accident")
-@EqualsAndHashCode()
-@Data
+@EqualsAndHashCode(of = {"name", "text", "address"})
+@ToString(exclude = "rules")
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Accident {
 
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -27,7 +27,9 @@ public class Accident {
     @JoinColumn(name = "accident_type_id")
     private AccidentType accidentType;
 
-    @OneToMany
-    @JoinColumn(name = "accident_rule_id")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "accident_rules",
+            joinColumns = {@JoinColumn(name = "accident_id")},
+            inverseJoinColumns = {@JoinColumn(name = "accident_rule_id")})
     private Set<Rule> rules;
 }

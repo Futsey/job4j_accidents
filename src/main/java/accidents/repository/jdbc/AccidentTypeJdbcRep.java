@@ -1,4 +1,4 @@
-package accidents.repository;
+package accidents.repository.jdbc;
 
 import accidents.model.AccidentType;
 import accidents.model.Rule;
@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -25,7 +26,7 @@ public class AccidentTypeJdbcRep {
             FROM types
             """;
 
-    private static final String FIND_REQUIRED_TYPES = """
+    private static final String FIND_TYPES_BY_ID = """
             SELECT *
             FROM types
             WHERE id = ?
@@ -35,7 +36,7 @@ public class AccidentTypeJdbcRep {
         return jdbc.query(FIND_ALL_TYPES, rowMapper);
     }
 
-    public List<AccidentType> getRequiredRules() {
-        return jdbc.query(FIND_REQUIRED_TYPES, rowMapper);
+    public AccidentType findById(int accidentTypeId) {
+        return jdbc.query(FIND_TYPES_BY_ID, rowMapper, accidentTypeId).get(accidentTypeId);
     }
 }

@@ -1,7 +1,7 @@
 package accidents.service;
 
 import accidents.model.AccidentType;
-import accidents.repository.AccidentTypeMem;
+import accidents.repository.inmemory.AccidentTypeMem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +20,13 @@ public class AccidentTypeService {
 
     public Optional<AccidentType> findById(int id) {
         return Optional.ofNullable(accidentTypeMem.findByTypeId(id));
+    }
+
+    public List<AccidentType> findAllWithJDBC() {
+        return accidentTypeMem.findAll();
+    }
+
+    public AccidentType findByIdWithJDBC(int id) {
+        return accidentTypeMem.findByTypeId(id);
     }
 }

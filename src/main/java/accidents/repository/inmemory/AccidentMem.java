@@ -1,4 +1,4 @@
-package accidents.repository;
+package accidents.repository.inmemory;
 
 import accidents.model.Accident;
 import accidents.model.AccidentType;

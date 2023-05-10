@@ -1,8 +1,9 @@
 package accidents.service;
 
 import accidents.model.Accident;
-import accidents.repository.AccidentJdbcRep;
-import accidents.repository.AccidentMem;
+import accidents.model.AccidentType;
+import accidents.repository.jdbc.AccidentJdbcRep;
+import accidents.repository.inmemory.AccidentMem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class AccidentService {
 
     private final AccidentMem accidentMem;
     private final AccidentTypeService accidentTypeService;
-    private final RuleService ruleService;
+    private final AccidentRuleService accidentRuleService;
 
     private final AccidentJdbcRep accidentJDBCRepostiory;
 
@@ -22,22 +23,18 @@ public class AccidentService {
         return accidentJDBCRepostiory.getAll();
     }
 
-//    public Optional<Accident> findByIdJDBC(Integer accidentId) {
-//        return Optional.ofNullable(accidentJDBCRepostiory.findById(accidentId));
-//    }
+    public AccidentType findByIdWithJDBC(int typeId) {
 
-    public boolean saveWithJDBC(Accident accident) {
-        return accidentJDBCRepostiory.save(accident);
+        return accidentTypeService.findByIdWithJDBC(typeId);
     }
 
-//    public boolean updateJDBC(Accident accident) {
-//        var rsl = false;
-//        if (Optional.ofNullable(accident).isPresent()) {
-//            accidentJDBCRepostiory.update(accident);
-//            rsl = true;
-//        }
-//        return rsl;
-//    }
+
+
+
+
+
+
+
 
     public List<Accident> findAll() {
         return accidentMem.findAll();
@@ -48,7 +45,7 @@ public class AccidentService {
     }
 
     public Optional<Accident> save(Accident accident, String[] ids) {
-        accident.setRules(ruleService.findRequiredRules(ids));
+        accident.setRules(accidentRuleService.findRequiredRules(ids));
         accident.setAccidentType(accidentTypeService.findById(accident.getAccidentType().getId()).get());
         return Optional.ofNullable(accidentMem.save(accident));
     }
@@ -61,4 +58,5 @@ public class AccidentService {
         }
         return rsl;
     }
+
 }

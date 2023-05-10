@@ -5,8 +5,7 @@ import accidents.model.AccidentType;
 import accidents.model.Rule;
 import accidents.service.AccidentService;
 import accidents.service.AccidentTypeService;
-import accidents.service.RuleService;
-import jakarta.servlet.http.HttpServletRequest;
+import accidents.service.AccidentRuleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +19,7 @@ import java.util.*;
 public class AccidentController {
 
     private final AccidentService accidentService;
-    private final RuleService ruleService;
+    private final AccidentRuleService accidentRuleService;
     private final AccidentTypeService accidentTypeService;
 
     @GetMapping()
@@ -29,31 +28,15 @@ public class AccidentController {
         return "/accidents/accidents";
     }
 
-//    @GetMapping("/info/{id}")
-//    public String formTaskInfo(Model model, @PathVariable("id") int id) {
-//        Optional<Accident> accidentInMem = accidentService.findById(id);
-//        accidentInMem.ifPresent(accident -> model.addAttribute("accident", accident));
-//        return "/accidents/info";
-//    }
-
+    /**TODO Need implementation
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-//        List<AccidentType> accidentTypes = accidentTypeService.findAll();
-//        model.addAttribute("accidentTypes", accidentTypes);
-//        List<Rule> rules = ruleService.findAllRules();
-//        model.addAttribute("rules", rules);
-//        model.addAttribute("accident", new Accident());
+        List<AccidentType> accidentTypes = accidentTypeService.findAll();
+        model.addAttribute("accidentTypes", accidentTypes);
+        List<Rule> rules = accidentRuleService.findAllRules();
+        model.addAttribute("rules", rules);
+        model.addAttribute("accident", new Accident());
         return "/accidents/createAccident";
-    }
-
-    @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident, HttpServletRequest req, Model model) {
-        String rsl = "redirect:/accidents";
-        if (accidentService.saveWithJDBC(accident)) {
-            model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
-            rsl = "/accidents/fail";
-        }
-        return rsl;
     }
 
     @GetMapping("/edit")
@@ -76,6 +59,7 @@ public class AccidentController {
         }
         return rsl;
     }
+    */
 
 
 

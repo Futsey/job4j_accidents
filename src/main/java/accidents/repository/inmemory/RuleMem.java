@@ -1,4 +1,4 @@
-package accidents.repository;
+package accidents.repository.inmemory;
 
 import accidents.model.Rule;
 import org.springframework.stereotype.Repository;
@@ -12,9 +12,9 @@ public class RuleMem {
     private final Map<Integer, Rule> rules = new HashMap<>();
 
     public RuleMem() {
-        rules.put(1, new Rule(1, "1.1.1 Parking rule"));
-        rules.put(2, new Rule(2, "1.1.2 Traffic lite rule"));
-        rules.put(3, new Rule(3, "1.1.3 Crosswalk rule"));
+        rules.put(1, new Rule(1, "1.1.1 Parking rule", new HashSet<>()));
+        rules.put(2, new Rule(2, "1.1.2 Traffic lite rule", new HashSet<>()));
+        rules.put(3, new Rule(3, "1.1.3 Crosswalk rule", new HashSet<>()));
     }
 
     public List<Rule> findAll() {
