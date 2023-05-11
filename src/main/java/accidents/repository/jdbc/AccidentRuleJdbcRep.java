@@ -76,9 +76,9 @@ public class AccidentRuleJdbcRep {
      */
     public Set<Rule> getRequiredRules(int[] ids) {
         Set<Rule> ruleHashSet = new HashSet<>();
-        for(int i = 0; i < ids.length; i++) {
-            ruleHashSet.add(getRuleById(ids[i]));
-        }
+            for (int i = 0; i < ids.length; i++) {
+                ruleHashSet.add(getRuleById(ids[i]));
+            }
         return ruleHashSet;
     }
 
