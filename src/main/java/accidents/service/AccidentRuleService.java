@@ -27,8 +27,15 @@ public class AccidentRuleService {
     }
 
     public Set<Rule> findRequiredRulesWithJDBC(int[] rIds) {
-        Set<Rule> tmp = accidentRuleJdbcRep.getRequiredRules(rIds);
-        return tmp;
+        return accidentRuleJdbcRep.getRequiredRules(rIds);
+    }
+
+    public void setRequiredRulesWithJDBC(int accidentId, int[] ids) {
+        if (accidentRuleJdbcRep.setRequiredRulesInAccident(accidentId, ids)) {
+            System.out.println("Rules added successful");
+        } else {
+            System.out.println("ERROR adding rules");
+        }
     }
 
     /** IN MEMORY SERVICE

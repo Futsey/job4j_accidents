@@ -1,5 +1,7 @@
 package accidents.repository.jdbc;
 
+import accidents.model.Accident;
+import accidents.model.AccidentsRules;
 import accidents.model.Rule;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,6 +46,11 @@ public class AccidentRuleJdbcRep {
                 WHERE accident_id = ?)
             """;
 
+    private static final String SET_REQUIRED_RULES = """
+            INSERT INTO accidents_rules (accident_id, accident_rule_id)
+            VALUES (?, ?)
+            """;
+
     public List<Rule> getAll() {
         return jdbc.query(FIND_ALL_RULES, rowMapper);
     }
@@ -68,11 +75,21 @@ public class AccidentRuleJdbcRep {
      * @return
      */
     public Set<Rule> getRequiredRules(int[] ids) {
-        Set<Rule> som = new HashSet<>();
+        Set<Rule> ruleHashSet = new HashSet<>();
         for(int i = 0; i < ids.length; i++) {
-            som.add(getRuleById(ids[i]));
+            ruleHashSet.add(getRuleById(ids[i]));
         }
-        return  som;
+        return ruleHashSet;
     }
 
+    public boolean setRequiredRulesInAccident(int accidentId, int[] ids) {
+        boolean rsl = false;
+        for (Integer ruleId : ids) {
+            jdbc.query(SET_REQUIRED_RULES, (rs, rowNum) -> AccidentsRules.builder()
+                    .accidentId(accidentId)
+                    .ruleId(ruleId)
+                    .build());
+        }
+        return true;
+    }
 }

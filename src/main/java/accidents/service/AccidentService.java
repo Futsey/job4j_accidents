@@ -2,8 +2,8 @@ package accidents.service;
 
 import accidents.model.Accident;
 import accidents.model.AccidentType;
+import accidents.model.Rule;
 import accidents.repository.jdbc.AccidentJdbcRep;
-import accidents.repository.inmemory.AccidentMem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,15 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AccidentService {
 
-    private final AccidentMem accidentMem;
+
     private final AccidentTypeService accidentTypeService;
     private final AccidentRuleService accidentRuleService;
 
     private final AccidentJdbcRep accidentJDBCRepostiory;
+
+    /** IN MEMORY SERVICE
+     private final AccidentMem accidentMem;
+     */
 
     public List<Accident> findAllJDBC() {
         return accidentJDBCRepostiory.getAll();
@@ -28,12 +32,14 @@ public class AccidentService {
     }
 
     public boolean saveJDBC(Accident accident, int[] ids) {
-        accident.setRules(accidentRuleService.findRequiredRulesWithJDBC(ids));
-        accident.setAccidentType(accidentTypeService.findByIdWithJDBC(accident.getAccidentType().getId()));
-        return accidentJDBCRepostiory.save(accident);
+        boolean rsl = false;
+        if (accidentJDBCRepostiory.save(accident) && ids.length > 0) {
+            System.out.println();
+            accidentRuleService.setRequiredRulesWithJDBC(accident.getId(), ids);
+            rsl = true;
+        }
+        return rsl;
     }
-
-
 
     /** IN MEMORY SERVICE
 
