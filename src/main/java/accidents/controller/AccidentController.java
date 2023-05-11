@@ -48,27 +48,29 @@ public class AccidentController {
         return rsl;
     }
 
-//    @GetMapping("/edit")
-//    public String formUpdateAccident(Model model, @RequestParam("id") int id) {
-//        String rsl = "/accidents/editAccident";
-//        Optional<Accident> accidentInDB = accidentService.findById(id);
-//        if (!accidentInDB.isEmpty()) {
-//            model.addAttribute("accident", accidentInDB.get());
-//        } else {
-//            rsl = "/editFail";
-//        }
-//        return rsl;
-//    }
-//
-//    @PostMapping("/update")
-//    public String editAccident(@ModelAttribute Accident accident) {
-//        String rsl = "redirect:/accidents";
-//        if (!accidentService.update(accident)) {
-//            rsl = "/editFail";
-//        }
-//        return rsl;
-//    }
+    /**
+    @GetMapping("/edit")
+    public String formUpdateAccident(Model model, @RequestParam("id") int id) {
+        String rsl = "/accidents/editAccident";
+        Optional<Accident> accidentInDB = accidentService.findById(id);
+        if (!accidentInDB.isEmpty()) {
+            model.addAttribute("accident", accidentInDB.get());
+        } else {
+            rsl = "/editFail";
+        }
+        return rsl;
+    }
 
+    @PostMapping("/update")
+    public String editAccident(@ModelAttribute Accident accident) {
+        String rsl = "redirect:/accidents";
+        if (!accidentService.update(accident)) {
+            rsl = "/editFail";
+        }
+        return rsl;
+    }
+
+     */
 
 
     /** IN MEMORY CONTROLLER
