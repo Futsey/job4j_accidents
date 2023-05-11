@@ -65,11 +65,11 @@
         <span th:text="${accident.accidentType}"></span>
       </td>
 
-<!--      <td class="text-center">-->
-<!--        <ul class="list-group" th:each="rule : ${accident.rules}">-->
-<!--          <li class="list-group-item" style = "border: aliceblue; color: navy" th:text="${category.name}"/>-->
-<!--        </ul>-->
-<!--      </td>-->
+      <td class="text-center">
+        <ul class="list-group" th:each="rule : ${accident.rules}">
+          <li class="list-group-item" style = "border: aliceblue; color: navy" th:text="${rule.name}"/>
+        </ul>
+      </td>
 
     </tr>
     </tbody>

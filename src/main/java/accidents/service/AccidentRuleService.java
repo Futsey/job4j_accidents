@@ -13,18 +13,32 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AccidentRuleService {
 
-    private final RuleMem ruleMem;
     private final AccidentRuleJdbcRep accidentRuleJdbcRep;
+    /** IN MEMORY SERVICE
+     private final RuleMem ruleMem;
+     */
 
-    public Set<Rule> findRequiredRules(String[] ids) {
-        return ruleMem.findRequiredRules(ids);
-    }
-
-    public List<Rule> findAllRules() {
-        return ruleMem.findAll();
+    public List<Rule> findAllRulesJDBC() {
+        return accidentRuleJdbcRep.getAll();
     }
 
     public Set<Rule> findRequiredRulesWithJDBC(int accidentId) {
         return accidentRuleJdbcRep.getRequiredRules(accidentId);
     }
+
+    public Set<Rule> findRequiredRulesWithJDBC(int[] rIds) {
+        Set<Rule> tmp = accidentRuleJdbcRep.getRequiredRules(rIds);
+        return tmp;
+    }
+
+    /** IN MEMORY SERVICE
+
+     public Set<Rule> findRequiredRules(String[] ids) {
+     return ruleMem.findRequiredRules(ids);
+     }
+
+     public List<Rule> findAllRules() {
+     return ruleMem.findAll();
+     }
+     */
 }

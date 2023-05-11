@@ -36,7 +36,7 @@ public class AccidentJdbcRep {
             """;
 
     private static final String SAVE_ACCIDENT = """
-            INSERT INTO accidents (id, name)
+            INSERT INTO accidents (id, name, text, address, accidentType, rules)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
 
@@ -49,18 +49,11 @@ public class AccidentJdbcRep {
     }
 
     public boolean save(Accident accident) {
-        return jdbc.update(SAVE_ACCIDENT, rowMapper) > 0;
+        boolean tmp = jdbc.update(SAVE_ACCIDENT, rowMapper, accident) > 0;
+        return jdbc.update(SAVE_ACCIDENT, rowMapper, accident) > 0;
     }
 
     public List<Accident> getAll() {
-        Set<Rule> rules = getRulesInAccident(1);
-        List<Accident> accidentList = jdbc.query(FIND_ALL_ACCIDENTS, rowMapper);
-        Accident accident0 = accidentList.get(0);
-        Accident accident1 = accidentList.get(1);
-        Accident accident2 = accidentList.get(2);
-        System.out.println(accident0.getRules());
-        System.out.println(accident1.getRules());
-        System.out.println(accident2.getRules());
-        return accidentList;
+        return jdbc.query(FIND_ALL_ACCIDENTS, rowMapper);
     }
 }

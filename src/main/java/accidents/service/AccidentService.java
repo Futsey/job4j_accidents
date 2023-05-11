@@ -24,39 +24,51 @@ public class AccidentService {
     }
 
     public AccidentType findByIdWithJDBC(int typeId) {
-
         return accidentTypeService.findByIdWithJDBC(typeId);
     }
 
-
-
-
-
-
-
-
-
-    public List<Accident> findAll() {
-        return accidentMem.findAll();
+    public boolean saveJDBC(Accident accident, int[] ids) {
+        accident.setRules(accidentRuleService.findRequiredRulesWithJDBC(ids));
+        accident.setAccidentType(accidentTypeService.findByIdWithJDBC(accident.getAccidentType().getId()));
+        return accidentJDBCRepostiory.save(accident);
     }
 
-    public Optional<Accident> findById(Integer accidentId) {
-        return Optional.ofNullable(accidentMem.findById(accidentId));
-    }
 
-    public Optional<Accident> save(Accident accident, String[] ids) {
-        accident.setRules(accidentRuleService.findRequiredRules(ids));
-        accident.setAccidentType(accidentTypeService.findById(accident.getAccidentType().getId()).get());
-        return Optional.ofNullable(accidentMem.save(accident));
-    }
 
-    public boolean update(Accident accident) {
-        var rsl = false;
-        if (Optional.ofNullable(accident).isPresent()) {
-            accidentMem.update(accident);
-            rsl = true;
-        }
-        return rsl;
-    }
+    /** IN MEMORY SERVICE
+
+     public List<Accident> findAll() {
+     return accidentMem.findAll();
+     }
+
+     public Optional<Accident> findById(Integer accidentId) {
+     return Optional.ofNullable(accidentMem.findById(accidentId));
+     }
+
+     public Optional<Accident> save(Accident accident, String[] ids) {
+     accident.setRules(accidentRuleService.findRequiredRules(ids));
+     accident.setAccidentType(accidentTypeService.findById(accident.getAccidentType().getId()).get());
+     return Optional.ofNullable(accidentMem.save(accident));
+     }
+
+     public boolean update(Accident accident) {
+     var rsl = false;
+     if (Optional.ofNullable(accident).isPresent()) {
+     accidentMem.update(accident);
+     rsl = true;
+     }
+     return rsl;
+     }
+     */
+
+
+
+
+
+
+
+
+
+
 
 }

@@ -6,6 +6,7 @@ import accidents.model.Rule;
 import accidents.service.AccidentService;
 import accidents.service.AccidentTypeService;
 import accidents.service.AccidentRuleService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,38 +29,45 @@ public class AccidentController {
         return "/accidents/accidents";
     }
 
-    /**TODO Need implementation
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> accidentTypes = accidentTypeService.findAll();
+        List<AccidentType> accidentTypes = accidentTypeService.findAllWithJDBC();
         model.addAttribute("accidentTypes", accidentTypes);
-        List<Rule> rules = accidentRuleService.findAllRules();
+        List<Rule> rules = accidentRuleService.findAllRulesJDBC();
         model.addAttribute("rules", rules);
-        model.addAttribute("accident", new Accident());
         return "/accidents/createAccident";
     }
 
-    @GetMapping("/edit")
-    public String formUpdateAccident(Model model, @RequestParam("id") int id) {
-        String rsl = "/accidents/editAccident";
-        Optional<Accident> accidentInDB = accidentService.findById(id);
-        if (!accidentInDB.isEmpty()) {
-            model.addAttribute("accident", accidentInDB.get());
-        } else {
-            rsl = "/editFail";
+    @PostMapping("/saveAccident")
+    public String save(@ModelAttribute Accident accident, Model model, @RequestParam("rIds") int[] ids) {
+        String rsl = "redirect:/accidents";
+        if (!accidentService.saveJDBC(accident, ids)) {
+            model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
+            rsl = "/accidents/fail";
         }
         return rsl;
     }
 
-    @PostMapping("/update")
-    public String editAccident(@ModelAttribute Accident accident) {
-        String rsl = "redirect:/accidents";
-        if (!accidentService.update(accident)) {
-            rsl = "/editFail";
-        }
-        return rsl;
-    }
-    */
+//    @GetMapping("/edit")
+//    public String formUpdateAccident(Model model, @RequestParam("id") int id) {
+//        String rsl = "/accidents/editAccident";
+//        Optional<Accident> accidentInDB = accidentService.findById(id);
+//        if (!accidentInDB.isEmpty()) {
+//            model.addAttribute("accident", accidentInDB.get());
+//        } else {
+//            rsl = "/editFail";
+//        }
+//        return rsl;
+//    }
+//
+//    @PostMapping("/update")
+//    public String editAccident(@ModelAttribute Accident accident) {
+//        String rsl = "redirect:/accidents";
+//        if (!accidentService.update(accident)) {
+//            rsl = "/editFail";
+//        }
+//        return rsl;
+//    }
 
 
 

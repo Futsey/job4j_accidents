@@ -14,14 +14,6 @@ public class AccidentTypeService {
 
     private final AccidentTypeMem accidentTypeMem;
 
-    public List<AccidentType> findAll() {
-        return accidentTypeMem.findAll();
-    }
-
-    public Optional<AccidentType> findById(int id) {
-        return Optional.ofNullable(accidentTypeMem.findByTypeId(id));
-    }
-
     public List<AccidentType> findAllWithJDBC() {
         return accidentTypeMem.findAll();
     }
@@ -29,4 +21,15 @@ public class AccidentTypeService {
     public AccidentType findByIdWithJDBC(int id) {
         return accidentTypeMem.findByTypeId(id);
     }
+
+    /** IN MEMORY SERVICE
+
+     public List<AccidentType> findAll() {
+     return accidentTypeMem.findAll();
+     }
+
+     public Optional<AccidentType> findById(int id) {
+     return Optional.ofNullable(accidentTypeMem.findByTypeId(id));
+     }
+     */
 }
