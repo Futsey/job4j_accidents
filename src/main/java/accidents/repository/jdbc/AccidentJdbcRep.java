@@ -10,9 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Statement;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -32,18 +30,11 @@ public class AccidentJdbcRep {
             .build();
 
     private final RowMapper<Accident> outOfRuleMapper = (rs, rowNum) -> Accident.builder()
-            .id(16)
             .name(rs.getString("name"))
             .text(rs.getString("text"))
             .address(rs.getString("address"))
             .accidentType(getType(rs.getInt("accident_type_id")))
             .build();
-
-    private static final String CHECK_MAX_ID = """
-            SELECT
-            MAX(id)
-            FROM accidents
-            """;
 
     private static final String FIND_ALL_ACCIDENTS = """
             SELECT *
@@ -51,8 +42,8 @@ public class AccidentJdbcRep {
             """;
 
     private static final String SAVE_ACCIDENT = """
-            INSERT INTO accidents (id, name, text, address, accident_type_id)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO accidents (name, text, address, accident_type_id)
+            VALUES (?, ?, ?, ?)
             """;
 
     public List<Accident> getAll() {
@@ -62,10 +53,6 @@ public class AccidentJdbcRep {
     public boolean save(Accident accident) {
         jdbc.query(SAVE_ACCIDENT, outOfRuleMapper);
         return true;
-    }
-
-    public int getMaxId(String sql) {
-        return jdbc.queryForObject(sql, Integer.class) + 1;
     }
 
     private AccidentType getType(int typeId) {

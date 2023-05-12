@@ -4,6 +4,8 @@ import accidents.model.Rule;
 import accidents.repository.inmemory.RuleMem;
 import accidents.repository.jdbc.AccidentRuleJdbcRep;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +16,10 @@ import java.util.Set;
 public class AccidentRuleService {
 
     private final AccidentRuleJdbcRep accidentRuleJdbcRep;
-    /** IN MEMORY SERVICE
-     private final RuleMem ruleMem;
-     */
+    private final RuleMem ruleMem;
+
+    private static final Logger LOG = LoggerFactory.getLogger(AccidentRuleService.class.getName());
+
 
     public List<Rule> findAllRulesJDBC() {
         return accidentRuleJdbcRep.getAll();
@@ -32,20 +35,17 @@ public class AccidentRuleService {
 
     public void setRequiredRulesWithJDBC(int accidentId, int[] ids) {
         if (accidentRuleJdbcRep.setRequiredRulesInAccident(accidentId, ids)) {
-            System.out.println("Rules added successful");
+            LOG.info("Rules added successful");
         } else {
-            System.out.println("ERROR adding rules");
+            LOG.error("ERROR in adding rules");
         }
     }
 
-    /** IN MEMORY SERVICE
+    public Set<Rule> findRequiredRules(String[] ids) {
+        return ruleMem.findRequiredRules(ids);
+    }
 
-     public Set<Rule> findRequiredRules(String[] ids) {
-     return ruleMem.findRequiredRules(ids);
-     }
-
-     public List<Rule> findAllRules() {
-     return ruleMem.findAll();
-     }
-     */
+    public List<Rule> findAllRules() {
+        return ruleMem.findAll();
+    }
 }

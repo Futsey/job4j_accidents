@@ -2,9 +2,12 @@ package accidents.service;
 
 import accidents.model.Accident;
 import accidents.model.AccidentType;
-import accidents.model.Rule;
+
+import accidents.repository.inmemory.AccidentMem;
 import accidents.repository.jdbc.AccidentJdbcRep;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,9 +22,10 @@ public class AccidentService {
 
     private final AccidentJdbcRep accidentJDBCRepostiory;
 
-    /** IN MEMORY SERVICE
-     private final AccidentMem accidentMem;
-     */
+    private final AccidentMem accidentMem;
+
+    private static final Logger LOG = LoggerFactory.getLogger(AccidentService.class.getName());
+
 
     public List<Accident> findAllJDBC() {
         return accidentJDBCRepostiory.getAll();
@@ -41,40 +45,26 @@ public class AccidentService {
         return rsl;
     }
 
-    /** IN MEMORY SERVICE
+    public List<Accident> findAll() {
+        return accidentMem.findAll();
+    }
 
-     public List<Accident> findAll() {
-     return accidentMem.findAll();
-     }
+    public Optional<Accident> findById(Integer accidentId) {
+        return Optional.ofNullable(accidentMem.findById(accidentId));
+    }
 
-     public Optional<Accident> findById(Integer accidentId) {
-     return Optional.ofNullable(accidentMem.findById(accidentId));
-     }
+    public Optional<Accident> save(Accident accident, String[] ids) {
+        accident.setRules(accidentRuleService.findRequiredRules(ids));
+        accident.setAccidentType(accidentTypeService.findById(accident.getAccidentType().getId()).get());
+        return Optional.ofNullable(accidentMem.save(accident));
+    }
 
-     public Optional<Accident> save(Accident accident, String[] ids) {
-     accident.setRules(accidentRuleService.findRequiredRules(ids));
-     accident.setAccidentType(accidentTypeService.findById(accident.getAccidentType().getId()).get());
-     return Optional.ofNullable(accidentMem.save(accident));
-     }
-
-     public boolean update(Accident accident) {
-     var rsl = false;
-     if (Optional.ofNullable(accident).isPresent()) {
-     accidentMem.update(accident);
-     rsl = true;
-     }
-     return rsl;
-     }
-     */
-
-
-
-
-
-
-
-
-
-
-
+    public boolean update(Accident accident) {
+        var rsl = false;
+        if (Optional.ofNullable(accident).isPresent()) {
+            accidentMem.update(accident);
+            rsl = true;
+        }
+        return rsl;
+    }
 }
