@@ -23,12 +23,12 @@ public class AccidentTypeJdbcRep {
 
     private static final String FIND_ALL_TYPES = """
             SELECT *
-            FROM types
+            FROM accident_types
             """;
 
     private static final String FIND_TYPES_BY_ID = """
             SELECT *
-            FROM types
+            FROM accident_types
             WHERE id = ?
             """;
 
@@ -36,7 +36,7 @@ public class AccidentTypeJdbcRep {
         return jdbc.query(FIND_ALL_TYPES, rowMapper);
     }
 
-    public AccidentType findById(int accidentTypeId) {
-        return jdbc.query(FIND_TYPES_BY_ID, rowMapper, accidentTypeId).get(accidentTypeId);
+    public Optional<AccidentType> findById(int accidentTypeId) {
+        return Optional.ofNullable(jdbc.queryForObject(FIND_TYPES_BY_ID, rowMapper, accidentTypeId));
     }
 }

@@ -28,7 +28,13 @@ public class AccidentService {
 
 
     public List<Accident> findAllJDBC() {
-        return accidentJDBCRepostiory.getAll();
+        List<Accident> filledAccidentList = accidentJDBCRepostiory.getAll();
+        if (!(filledAccidentList.size() == 0)) {
+            LOG.info("Accidents was founded successfully");
+        } else {
+            LOG.error("Accidents wasn`t found. Empty list of accidents was returned");
+        }
+        return filledAccidentList;
     }
 
     public AccidentType findByIdWithJDBC(int typeId) {
@@ -37,9 +43,11 @@ public class AccidentService {
 
     public boolean saveJDBC(Accident accident, int[] ids) {
         boolean rsl = false;
-        if (accidentJDBCRepostiory.save(accident) && ids.length > 0) {
-            System.out.println();
-            accidentRuleService.setRequiredRulesWithJDBC(accident.getId(), ids);
+        Optional<Accident> nonNullAccident = Optional.ofNullable(accidentJDBCRepostiory.save(accident));
+        if (nonNullAccident.isPresent() && ids.length > 0) {
+            Accident tmpAccident =  nonNullAccident.get();
+            tmpAccident.setRules(accidentRuleService.findRequiredRulesWithJDBC(ids));
+            accidentRuleService.setRequiredRulesWithJDBC(tmpAccident);
             rsl = true;
         }
         return rsl;

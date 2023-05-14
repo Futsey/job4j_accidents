@@ -6,7 +6,6 @@ import accidents.model.Rule;
 import accidents.service.AccidentService;
 import accidents.service.AccidentTypeService;
 import accidents.service.AccidentRuleService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

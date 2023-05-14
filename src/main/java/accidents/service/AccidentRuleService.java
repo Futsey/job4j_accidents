@@ -1,5 +1,6 @@
 package accidents.service;
 
+import accidents.model.Accident;
 import accidents.model.Rule;
 import accidents.repository.inmemory.RuleMem;
 import accidents.repository.jdbc.AccidentRuleJdbcRep;
@@ -22,19 +23,37 @@ public class AccidentRuleService {
 
 
     public List<Rule> findAllRulesJDBC() {
-        return accidentRuleJdbcRep.getAll();
+        List<Rule> filledRuleList = accidentRuleJdbcRep.getAll();
+        if (!(filledRuleList.size() == 0)) {
+            LOG.info("Rules was founded successfully");
+        } else {
+            LOG.error("Rules wasn`t found. Empty list of rules was returned");
+        }
+        return filledRuleList;
     }
 
     public Set<Rule> findRequiredRulesWithJDBC(int accidentId) {
-        return accidentRuleJdbcRep.getRequiredRules(accidentId);
+        Set<Rule> filledRuleSet = accidentRuleJdbcRep.getRequiredRules(accidentId);
+        if (!(filledRuleSet.size() == 0)) {
+            LOG.info("Rules was founded successfully");
+        } else {
+            LOG.error("Rules wasn`t found. Empty set of rules was returned");
+        }
+        return filledRuleSet;
     }
 
     public Set<Rule> findRequiredRulesWithJDBC(int[] rIds) {
-        return accidentRuleJdbcRep.getRequiredRules(rIds);
+        Set<Rule> filledRuleSet = accidentRuleJdbcRep.getRequiredRules(rIds);
+        if (!(filledRuleSet.size() == 0)) {
+            LOG.info("Rules was founded successfully");
+        } else {
+            LOG.error("Rules wasn`t found. Empty set of rules was returned");
+        }
+        return filledRuleSet;
     }
 
-    public void setRequiredRulesWithJDBC(int accidentId, int[] ids) {
-        if (accidentRuleJdbcRep.setRequiredRulesInAccident(accidentId, ids)) {
+    public void setRequiredRulesWithJDBC(Accident accident) {
+        if (accidentRuleJdbcRep.setRequiredRulesInAccident(accident)) {
             LOG.info("Rules added successful");
         } else {
             LOG.error("ERROR in adding rules");

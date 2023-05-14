@@ -6,8 +6,13 @@ import accidents.model.Rule;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +53,7 @@ public class AccidentRuleJdbcRep {
 
     private static final String SET_REQUIRED_RULES = """
             INSERT INTO accidents_rules (accident_id, accident_rule_id)
-            VALUES (?, ?)
+            VALUES (?, ?);
             """;
 
     public List<Rule> getAll() {
@@ -82,14 +87,11 @@ public class AccidentRuleJdbcRep {
         return ruleHashSet;
     }
 
-    public boolean setRequiredRulesInAccident(int accidentId, int[] ids) {
-        boolean rsl = false;
-        for (Integer ruleId : ids) {
-            jdbc.query(SET_REQUIRED_RULES, (rs, rowNum) -> AccidentsRules.builder()
-                    .accidentId(accidentId)
-                    .ruleId(ruleId)
-                    .build());
-        }
+    public boolean setRequiredRulesInAccident(Accident accident) {
+        accident.getRules().forEach(rule -> jdbc.update(
+                SET_REQUIRED_RULES,
+                accident.getId(), rule.getId()
+        ));
         return true;
     }
 }
