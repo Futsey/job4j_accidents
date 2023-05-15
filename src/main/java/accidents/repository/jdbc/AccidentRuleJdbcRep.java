@@ -1,23 +1,15 @@
 package accidents.repository.jdbc;
 
 import accidents.model.Accident;
-import accidents.model.AccidentsRules;
 import accidents.model.Rule;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -70,8 +62,7 @@ public class AccidentRuleJdbcRep {
     }
 
     public Set<Rule> getRequiredRules(int accidentId) {
-        Set<Rule> som = new HashSet<>(jdbc.query(FIND_REQUIRED_RULES, rowMapper, accidentId));
-        return  som;
+        return  new HashSet<>(jdbc.query(FIND_REQUIRED_RULES, rowMapper, accidentId));
     }
 
     /**TODO Rewrite to stream API

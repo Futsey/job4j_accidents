@@ -1,12 +1,10 @@
 package accidents.service;
 
 import accidents.model.Accident;
-import accidents.model.AccidentType;
 
 import accidents.repository.inmemory.AccidentMem;
 import accidents.repository.jdbc.AccidentJdbcRep;
 import accidents.repository.jdbc.AccidentRuleJdbcRep;
-import accidents.repository.jdbc.AccidentTypeJdbcRep;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +54,10 @@ public class AccidentService {
             Accident tmpAccident =  nonNullAccident.get();
             tmpAccident.setRules(accidentRuleJdbcRep.getRequiredRules(ids));
             accidentRuleJdbcRep.setRequiredRulesInAccident(tmpAccident);
+            LOG.info("Accident was saved successfully");
             rsl = true;
+        } else {
+            LOG.error("Accident wasn`t saved");
         }
         return rsl;
     }

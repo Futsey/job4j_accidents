@@ -31,14 +31,20 @@ public class AccidentJdbcRep {
                     .id(rs.getInt("typeId"))
                     .name(rs.getString("typeName"))
                     .build())
-            .rules(getRulesInAccident(rs.getInt("id")))
+            .rules(new HashSet<>(Collections.singleton(Rule.builder()
+                    .id(rs.getInt("ruleId"))
+                    .name(rs.getString("ruleName"))
+                    .build())))
             .build();
 
-    private final static String FIND_ALL_ACCIDENTS_JOIN_ACCIDENT_TYPES = """
-            SELECT a.id, a.name, a.text, a.address, at.id AS typeId, at.name AS typeName
+    private final static String FIND_ALL_ACCIDENTS_JOIN_ACCIDENT_TYPES_AND_ACCIDENT_RULES = """
+            SELECT a.id, a.name, a.text, a.address,
+                   at.id AS typeId, at.name AS typeName,
+                   ar.id AS ruleId, ar.name AS ruleName
             FROM accidents AS a
-            JOIN accident_types AS at ON at.id = a.accident_type_id
-            ORDER BY a.id
+                     JOIN accident_types AS at ON at.id = a.accident_type_id
+                     JOIN accident_rules AS ar ON a.id = ar.id
+            ORDER BY a.id;
             """;
 
     private final static String FIND_ACCIDENTS_BY_ID_JOIN_ACCIDENT_TYPES = """
@@ -54,7 +60,7 @@ public class AccidentJdbcRep {
             """;
 
     public List<Accident> getAll() {
-        return jdbc.query(FIND_ALL_ACCIDENTS_JOIN_ACCIDENT_TYPES, fullMapper);
+        return jdbc.query(FIND_ALL_ACCIDENTS_JOIN_ACCIDENT_TYPES_AND_ACCIDENT_RULES, fullMapper);
     }
 
     public Optional<Accident> findById(int accidentId) {
@@ -75,12 +81,11 @@ public class AccidentJdbcRep {
             return ps;
         }, keyHolder);
         accident.setId((Integer) keyHolder.getKeys().get("id"));
+        accident.setRules(getRulesInAccident(accident.getId()));
         return accident;
     }
 
     private Set<Rule> getRulesInAccident(int accidentId) {
         return accidentRuleService.findRequiredRulesWithJDBC(accidentId);
     }
-
-
 }
