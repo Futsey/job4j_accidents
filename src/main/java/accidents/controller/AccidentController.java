@@ -47,6 +47,19 @@ public class AccidentController {
         return rsl;
     }
 
+    /**TODO INFO PAGE
+     *
+     * @param model
+     * @param id
+     * @return
+     */
+    @GetMapping("/info/{id}")
+    public String formAccidentInfo(Model model, @PathVariable("id") int id) {
+        Optional<Accident> accidentInMem = accidentService.findByIdWithJDBC(id);
+        accidentInMem.ifPresent(accident -> model.addAttribute("accident", accident));
+        return "/accidents/TODO_INFOPAGE";
+    }
+
     /**
     @GetMapping("/edit")
     public String formUpdateAccident(Model model, @RequestParam("id") int id) {

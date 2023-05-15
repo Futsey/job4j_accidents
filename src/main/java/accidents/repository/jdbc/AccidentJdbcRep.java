@@ -4,7 +4,6 @@ import accidents.model.Accident;
 import accidents.model.AccidentType;
 import accidents.model.Rule;
 import accidents.service.AccidentRuleService;
-import accidents.service.AccidentTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,7 +19,6 @@ import java.util.*;
 @AllArgsConstructor
 public class AccidentJdbcRep {
 
-    private final AccidentTypeService accidentTypeService;
     private final AccidentRuleService accidentRuleService;
     private final JdbcTemplate jdbc;
 
@@ -29,13 +27,25 @@ public class AccidentJdbcRep {
             .name(rs.getString("name"))
             .text(rs.getString("text"))
             .address(rs.getString("address"))
-            .accidentType(getType(rs.getInt("accident_type_id")))
+            .accidentType(AccidentType.builder()
+                    .id(rs.getInt("typeId"))
+                    .name(rs.getString("typeName"))
+                    .build())
             .rules(getRulesInAccident(rs.getInt("id")))
             .build();
 
-    private static final String FIND_ALL_ACCIDENTS = """
-            SELECT *
-            FROM accidents
+    private final static String FIND_ALL_ACCIDENTS_JOIN_ACCIDENT_TYPES = """
+            SELECT a.id, a.name, a.text, a.address, at.id AS typeId, at.name AS typeName
+            FROM accidents AS a
+            JOIN accident_types AS at ON at.id = a.accident_type_id
+            ORDER BY a.id
+            """;
+
+    private final static String FIND_ACCIDENTS_BY_ID_JOIN_ACCIDENT_TYPES = """
+            SELECT a.id, a.name, a.text, a.address, at.id AS typeId, at.name AS typeName
+            FROM accidents AS a
+            JOIN accident_types AS at ON at.id = a.accident_type_id
+            WHERE a.id = ?
             """;
 
     private static final String SAVE_ACCIDENT = """
@@ -44,7 +54,14 @@ public class AccidentJdbcRep {
             """;
 
     public List<Accident> getAll() {
-        return jdbc.query(FIND_ALL_ACCIDENTS, fullMapper);
+        return jdbc.query(FIND_ALL_ACCIDENTS_JOIN_ACCIDENT_TYPES, fullMapper);
+    }
+
+    public Optional<Accident> findById(int accidentId) {
+        return Optional.ofNullable(jdbc.queryForObject(
+                FIND_ACCIDENTS_BY_ID_JOIN_ACCIDENT_TYPES,
+                new Object[] {accidentId},
+                fullMapper));
     }
 
     public Accident save(Accident accident) {
@@ -61,11 +78,9 @@ public class AccidentJdbcRep {
         return accident;
     }
 
-    private AccidentType getType(int typeId) {
-        return accidentTypeService.findByIdWithJDBC(typeId);
-    }
-
     private Set<Rule> getRulesInAccident(int accidentId) {
         return accidentRuleService.findRequiredRulesWithJDBC(accidentId);
     }
+
+
 }

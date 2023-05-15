@@ -5,6 +5,8 @@ import accidents.model.AccidentType;
 
 import accidents.repository.inmemory.AccidentMem;
 import accidents.repository.jdbc.AccidentJdbcRep;
+import accidents.repository.jdbc.AccidentRuleJdbcRep;
+import accidents.repository.jdbc.AccidentTypeJdbcRep;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +18,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AccidentService {
 
-
-    private final AccidentTypeService accidentTypeService;
     private final AccidentRuleService accidentRuleService;
+    private final AccidentTypeService accidentTypeService;
 
     private final AccidentJdbcRep accidentJDBCRepostiory;
+    private final AccidentRuleJdbcRep accidentRuleJdbcRep;
 
     private final AccidentMem accidentMem;
 
@@ -37,8 +39,14 @@ public class AccidentService {
         return filledAccidentList;
     }
 
-    public AccidentType findByIdWithJDBC(int typeId) {
-        return accidentTypeService.findByIdWithJDBC(typeId);
+    public Optional<Accident> findByIdWithJDBC(int accidentId) {
+        Optional<Accident> nonNullAccident = accidentJDBCRepostiory.findById(accidentId);
+        if (nonNullAccident.isPresent()) {
+            LOG.info("Accident was found successfully");
+        } else {
+            LOG.error("Accident wasn`t found. Empty accident was returned");
+        }
+        return nonNullAccident;
     }
 
     public boolean saveJDBC(Accident accident, int[] ids) {
@@ -46,8 +54,8 @@ public class AccidentService {
         Optional<Accident> nonNullAccident = Optional.ofNullable(accidentJDBCRepostiory.save(accident));
         if (nonNullAccident.isPresent() && ids.length > 0) {
             Accident tmpAccident =  nonNullAccident.get();
-            tmpAccident.setRules(accidentRuleService.findRequiredRulesWithJDBC(ids));
-            accidentRuleService.setRequiredRulesWithJDBC(tmpAccident);
+            tmpAccident.setRules(accidentRuleJdbcRep.getRequiredRules(ids));
+            accidentRuleJdbcRep.setRequiredRulesInAccident(tmpAccident);
             rsl = true;
         }
         return rsl;
