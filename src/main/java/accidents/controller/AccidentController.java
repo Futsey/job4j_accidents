@@ -55,9 +55,39 @@ public class AccidentController {
      */
     @GetMapping("/info/{id}")
     public String formAccidentInfo(Model model, @PathVariable("id") int id) {
-        Optional<Accident> accidentInMem = accidentService.findByIdWithJDBC(id);
-        accidentInMem.ifPresent(accident -> model.addAttribute("accident", accident));
+        Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
+        accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
         return "/accidents/TODO_INFOPAGE";
+    }
+
+    @GetMapping("/edit")
+    public String formUpdateAccident(Model model, @RequestParam("id") int id) {
+        String rsl = "/accidents/editAccident";
+        Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
+        if (accidentInDB.isPresent()) {
+            model.addAttribute("accident", accidentInDB.get());
+        } else {
+            rsl = "/fail";
+        }
+        return rsl;
+    }
+
+    @PostMapping("/update")
+    public String editAccident(@ModelAttribute Accident accident) {
+        String rsl = "redirect:/accidents";
+        if (!accidentService.updateJDBC(accident)) {
+            rsl = "/fail";
+        }
+        return rsl;
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteAccident(@PathVariable("id") int id) {
+        String rsl = "redirect:/accidents";
+        if (!accidentService.deleteJDBC(id)) {
+            rsl = "/fail";
+        }
+        return rsl;
     }
 
     /**

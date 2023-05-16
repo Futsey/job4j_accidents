@@ -32,4 +32,9 @@ public class Accident {
             joinColumns = {@JoinColumn(name = "accident_id")},
             inverseJoinColumns = {@JoinColumn(name = "accident_rule_id")})
     private Set<Rule> rules;
+
+    public void addRule(Rule r) {
+        this.rules.add(r);
+        r.getAccidents().add(this);
+    }
 }

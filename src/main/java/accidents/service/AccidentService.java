@@ -28,7 +28,7 @@ public class AccidentService {
 
 
     public List<Accident> findAllJDBC() {
-        List<Accident> filledAccidentList = accidentJDBCRepostiory.getAll();
+        List<Accident> filledAccidentList = accidentJDBCRepostiory.getAllAccidents();
         if (!(filledAccidentList.size() == 0)) {
             LOG.info("Accidents was founded successfully");
         } else {
@@ -40,6 +40,7 @@ public class AccidentService {
     public Optional<Accident> findByIdWithJDBC(int accidentId) {
         Optional<Accident> nonNullAccident = accidentJDBCRepostiory.findById(accidentId);
         if (nonNullAccident.isPresent()) {
+            nonNullAccident.get().setRules(accidentRuleJdbcRep.getRequiredRules(accidentId));
             LOG.info("Accident was found successfully");
         } else {
             LOG.error("Accident wasn`t found. Empty accident was returned");
@@ -60,6 +61,14 @@ public class AccidentService {
             LOG.error("Accident wasn`t saved");
         }
         return rsl;
+    }
+
+    public boolean updateJDBC(Accident accident) {
+        return accidentJDBCRepostiory.updateAccident(accident);
+    }
+
+    public boolean deleteJDBC(int id) {
+        return accidentJDBCRepostiory.delete(id);
     }
 
     public List<Accident> findAll() {
