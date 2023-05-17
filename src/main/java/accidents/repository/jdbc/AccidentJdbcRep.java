@@ -5,14 +5,16 @@ import accidents.model.AccidentType;
 import accidents.model.Rule;
 import accidents.service.AccidentRuleService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
@@ -57,12 +59,13 @@ public class AccidentJdbcRep {
             ORDER BY a.id;
             """;
 
-    private final static String FIND_ACCIDENTS_BY_ID_JOIN_ACCIDENT_TYPES = """
-            SELECT a.id, a.name, a.text, a.address, at.id AS typeId, at.name AS typeName
-            FROM accidents AS a
-            JOIN accident_types AS at ON at.id = a.accident_type_id
-            WHERE a.id = ?
-            """;
+    private final static String FIND_ACCIDENT_BY_ID_JOIN_ACCIDENT_TYPES_AND_ACCIDENT_RULES = """
+            SELECT a.id, a.name, text, address, accident_type_id, t.name as typeName,
+                   r.id as ruleId, r.name as ruleName from accidents as a
+                   JOIN accidents_rules ar on a.id = ar.accident_id
+                   JOIN accident_rules r on ar.accident_rule_id = r.id
+                   JOIN accident_types t on a.accident_type_id = t.id
+            WHERE a.id = ?            """;
 
     private static final String SAVE_ACCIDENT = """
             INSERT INTO accidents (name, text, address, accident_type_id)
@@ -89,21 +92,37 @@ public class AccidentJdbcRep {
         return values.size() > 0 ? new ArrayList<>(values) : new ArrayList<>();
     }
 
+    public static class AccidentResultSetExtractor implements ResultSetExtractor<Accident> {
+        @Override
+        public Accident extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Accident accident = null;
+            while (rs.next()) {
+                if (accident == null) {
+                    accident = new Accident();
+                    accident.setId(rs.getInt("id"));
+                    accident.setName(rs.getString("name"));
+                    accident.setText(rs.getString("text"));
+                    accident.setAddress(rs.getString("address"));
+                    accident.setAccidentType(AccidentType.builder()
+                            .id(rs.getInt("accident_type_id"))
+                            .name(rs.getString("typeName"))
+                            .build());
+                    accident.setRules(new HashSet<>());
+                }
+                accident.getRules().add(
+                        Rule.builder()
+                                .id(rs.getInt("ruleId"))
+                                .name(rs.getString("ruleName"))
+                                .build());
+            }
+            return accident;
+        }
+    }
+
     public Optional<Accident> findById(int accidentId) {
-        return Optional.ofNullable(jdbc.queryForObject(
-                FIND_ACCIDENTS_BY_ID_JOIN_ACCIDENT_TYPES,
-                new Object[] {accidentId},
-                (rs, rowNum) -> Accident.builder()
-                        .id(rs.getInt("id"))
-                        .name(rs.getString("name"))
-                        .text(rs.getString("text"))
-                        .address(rs.getString("address"))
-                        .accidentType(AccidentType.builder()
-                                .id(rs.getInt("typeId"))
-                                .name(rs.getString("typeName"))
-                                .build())
-                        .rules(new HashSet())
-                        .build()));
+        return Optional.ofNullable(jdbc.query(FIND_ACCIDENT_BY_ID_JOIN_ACCIDENT_TYPES_AND_ACCIDENT_RULES,
+                new Object[]{accidentId},
+                new AccidentResultSetExtractor()));
     }
 
     public Accident save(Accident accident) {
@@ -126,12 +145,20 @@ public class AccidentJdbcRep {
     }
 
     public boolean updateAccident(Accident accident) {
-        return jdbc.update(UPDATE_ACCIDENT,
-                accident.getName(),
-                accident.getText(),
-                accident.getAddress(),
-                accident.getId()
-        ) > 0;
+        boolean rsl = false;
+        if (jdbc.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(UPDATE_ACCIDENT);
+            ps.setString(1, accident.getName());
+            ps.setString(2, accident.getText());
+            ps.setString(3, accident.getAddress());
+            ps.setInt(4, accident.getAccidentType().getId());
+            return ps;
+        }) > 0) {
+            accident.setId(accident.getId());
+            accident.setRules(getRulesInAccident(accident.getId()));
+            rsl = true;
+        }
+        return rsl;
     }
 
     public boolean delete(int id) {
