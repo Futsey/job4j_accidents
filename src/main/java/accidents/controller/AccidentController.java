@@ -25,7 +25,7 @@ public class AccidentController {
     @GetMapping()
     public String showAll(Model model) {
         model.addAttribute("accidents", accidentService.findAllJDBC());
-        return "/accidents/accidents";
+        return "accidents/accidents";
     }
 
     @GetMapping("/createAccident")
@@ -53,11 +53,19 @@ public class AccidentController {
      * @param id
      * @return
      */
+    @GetMapping("/info")
+//    public String formAccidentInfo(Model model, @PathVariable("id") int id) {
+    public String formAccidentInfo(Model model) {
+//        Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
+//        accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
+        return "/accidents/findAccident";
+    }
+
     @GetMapping("/info/{id}")
-    public String formAccidentInfo(Model model, @PathVariable("id") int id) {
+    public String AccidentInfo(Model model, @PathVariable("id") int id) {
         Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
         accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
-        return "/accidents/TODO_INFOPAGE";
+        return "/accidents/findAccident";
     }
 
     @GetMapping("/edit")
