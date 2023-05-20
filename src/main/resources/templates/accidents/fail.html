@@ -31,30 +31,8 @@
 </nav>
 <header class="bg-primary-gradient" style="background: #ffffff;"></header>
 <section class="py-5" style="margin-bottom: 288px;">
-  <div class="container-fluid">
-    <div class="container modern-form">
-      <div class="text-center" style="margin-bottom: 25px">
-        <h4 style="color: #212529;font-size: 45px;">Search by fields</h4>
-      </div>
-      <hr class="modern-form__hr" />
-      <div class="modern-form__form-container">
-<!--        <form th:action="@{/info/{id}}" method="POST" th:object="${accident}">-->
-        <form action="#" th:action="@{/info/{id}}" method="POST">
-          <div class="form-row">
-            <div class="col col-contact">
-              <div class="form-group modern-form__form-group--padding-r">
-                <input class="form-control input input-tr" type="number" name="id" id="id" placeholder="ID"/>
-                <div class="line-box">
-                  <div class="line"></div>
-                </div>
-              </div>
-          <div class="form-row">
-            <div class="col text-center"><button class="btn btn-primary submit-now" type="submit" style="margin-top: 25px">Find</button></div>
-          </div>
-        </form>
-      </div>
-    </div>
-
+  <div>
+    <div th:text="${message}">FAIL</div>
   </div>
 </section>
 <section></section>
@@ -89,4 +67,42 @@
 <script src="/static/assets/bootstrap/js/Ludens---1-Index-Table-with-Search--Sort-Filters-v20-Ludens---Material-UI-Actions.js"></script>
 </body>
 
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <title>Index</title>
+</head>
+<body>
+
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" th:href="@{/index}">Главная</a>
+        <a class="nav-item nav-link" th:href="@{/accidents}">Инциденты</a>
+        <a class="nav-item nav-link active" th:href="@{/accidents/createAccident}">Добавить Инцидент</a>
+      </div>
+    </div>
+  </nav>
+
+  <div>
+    <div th:text="${message}">FAIL</div>
+  </div>
+
+</div>
+</body>
 </html>

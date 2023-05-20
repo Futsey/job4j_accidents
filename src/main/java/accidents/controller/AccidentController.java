@@ -53,11 +53,8 @@ public class AccidentController {
      * @param id
      * @return
      */
-    @GetMapping("/info")
-//    public String formAccidentInfo(Model model, @PathVariable("id") int id) {
-    public String formAccidentInfo(Model model) {
-//        Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
-//        accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
+    @GetMapping("/search")
+    public String formAccidentInfo() {
         return "/accidents/findAccident";
     }
 
@@ -65,15 +62,19 @@ public class AccidentController {
     public String AccidentInfo(Model model, @PathVariable("id") int id) {
         Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
         accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
-        return "/accidents/findAccident";
+        return "/accidents/accident";
     }
 
-    @GetMapping("/edit")
-    public String formUpdateAccident(Model model, @RequestParam("id") int id) {
+    @GetMapping("/edit/{id}")
+    public String formUpdateAccident(Model model, @PathVariable("id") int id) {
         String rsl = "/accidents/editAccident";
         Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
         if (accidentInDB.isPresent()) {
             model.addAttribute("accident", accidentInDB.get());
+            List<AccidentType> accidentTypes = accidentTypeService.findAllWithJDBC();
+            model.addAttribute("accidentTypes", accidentTypes);
+            List<Rule> rules = accidentRuleService.findAllRulesJDBC();
+            model.addAttribute("rules", rules);
         } else {
             rsl = "/fail";
         }

@@ -73,8 +73,8 @@ public class AccidentJdbcRep {
             """;
 
     private static final String UPDATE_ACCIDENT = """
-            UPDATE accidents 
-            SET name = ?, text = ?, address = ? 
+            UPDATE accidents
+            SET name = ?, text = ?, address = ?
             WHERE id = ?
             """;
 

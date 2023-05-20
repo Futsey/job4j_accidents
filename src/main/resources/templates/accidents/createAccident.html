@@ -32,30 +32,53 @@
 <header class="bg-primary-gradient" style="background: #ffffff;"></header>
 <section class="py-5" style="margin-bottom: 288px;">
   <div class="container-fluid">
-    <div class="container modern-form">
-      <div class="text-center" style="margin-bottom: 25px">
-        <h4 style="color: #212529;font-size: 45px;">Search by fields</h4>
-      </div>
-      <hr class="modern-form__hr" />
-      <div class="modern-form__form-container">
-<!--        <form th:action="@{/info/{id}}" method="POST" th:object="${accident}">-->
-        <form action="#" th:action="@{/info/{id}}" method="POST">
-          <div class="form-row">
-            <div class="col col-contact">
-              <div class="form-group modern-form__form-group--padding-r">
-                <input class="form-control input input-tr" type="number" name="id" id="id" placeholder="ID"/>
-                <div class="line-box">
-                  <div class="line"></div>
-                </div>
-              </div>
-          <div class="form-row">
-            <div class="col text-center"><button class="btn btn-primary submit-now" type="submit" style="margin-top: 25px">Find</button></div>
-          </div>
-        </form>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+        <h3 class="text-dark mb-12">New Accident</h3>
       </div>
     </div>
 
-  </div>
+    <div class="row pt-1">
+      <div class="card" style="width: 100%">
+        <div class="card-body">
+          <form th:action="@{/accidents/saveAccident}" method="POST" enctype="multipart/form-data"  th:object="${accident}">
+            <input type="hidden" name="id" value="0"/>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" name="name" id="name">
+            </div>
+            <div class="form-group">
+              <label for="text">Description</label>
+              <input type="text" class="form-control" name="text" id="text">
+            </div>
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input type="text" class="form-control" name="address" id="address">
+            </div>
+            <div class="form-group">
+              <label for="accidentType.id">Type</label>
+              <select class="form-control" id="accidentType.id"  name="accidentType.id">
+                <option th:each="accidentType: ${accidentTypes}"
+                        th:text="${accidentType.name}"
+                        th:value="${accidentType.id}"></option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="rIds">Rule</label>
+              <select class="form-control" id="rIds" name="rIds" multiple>
+                <option th:each="rule: ${rules}"
+                        th:text="${rule.name}"
+                        th:value="${rule.id}"></option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    </div>
 </section>
 <section></section>
 <section></section>
