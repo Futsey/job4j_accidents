@@ -2,6 +2,7 @@ package accidents.service;
 
 import accidents.model.Accident;
 
+import accidents.repository.hbm.AccidentHBMRep;
 import accidents.repository.inmemory.AccidentMem;
 import accidents.repository.jdbc.AccidentJdbcRep;
 import accidents.repository.jdbc.AccidentRuleJdbcRep;
@@ -19,6 +20,8 @@ public class AccidentService {
     private final AccidentRuleService accidentRuleService;
     private final AccidentTypeService accidentTypeService;
 
+    private final AccidentHBMRep accidentHBMRep;
+
     private final AccidentJdbcRep accidentJDBCRepostiory;
     private final AccidentRuleJdbcRep accidentRuleJdbcRep;
 
@@ -26,6 +29,15 @@ public class AccidentService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AccidentService.class.getName());
 
+    public List<Accident> findAllHBM() {
+        List<Accident> filledAccidentList = accidentHBMRep.getAll();
+        if (!(filledAccidentList.size() == 0)) {
+            LOG.info("Accidents was founded successfully");
+        } else {
+            LOG.error("Accidents wasn`t found. Empty list of accidents was returned");
+        }
+        return filledAccidentList;
+    }
 
     public List<Accident> findAllJDBC() {
         List<Accident> filledAccidentList = accidentJDBCRepostiory.getAllAccidents();

@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "accidents_accident")
-@EqualsAndHashCode(of = {"name", "text", "address"})
+@Table(name = "accidents")
+@EqualsAndHashCode(of = {"id"})
 @ToString(exclude = "rules")
 @Builder
 @Data
@@ -28,7 +28,7 @@ public class Accident {
     private AccidentType accidentType;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "accident_rules",
+    @JoinTable(name = "accidents_rules",
             joinColumns = {@JoinColumn(name = "accident_id")},
             inverseJoinColumns = {@JoinColumn(name = "accident_rule_id")})
     private Set<Rule> rules;
