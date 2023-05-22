@@ -2,7 +2,11 @@ package accidents.service;
 
 import accidents.model.Accident;
 
+import accidents.model.AccidentType;
+import accidents.model.Rule;
 import accidents.repository.hbm.AccidentHBMRep;
+import accidents.repository.hbm.AccidentRuleHBMRep;
+import accidents.repository.hbm.AccidentTypeHBMRep;
 import accidents.repository.inmemory.AccidentMem;
 import accidents.repository.jdbc.AccidentJdbcRep;
 import accidents.repository.jdbc.AccidentRuleJdbcRep;
@@ -22,6 +26,9 @@ public class AccidentService {
 
     private final AccidentHBMRep accidentHBMRep;
 
+    private final AccidentRuleHBMRep accidentRuleHBMRep;
+    private final AccidentTypeHBMRep accidentTypeHBMRep;
+
     private final AccidentJdbcRep accidentJDBCRepostiory;
     private final AccidentRuleJdbcRep accidentRuleJdbcRep;
 
@@ -39,6 +46,16 @@ public class AccidentService {
         return filledAccidentList;
     }
 
+    public Optional<Accident> findByIdWithHBM(int accidentId) {
+        Optional<Accident> nonNullAccident = accidentHBMRep.findById(accidentId);
+        if (nonNullAccident.isPresent()) {
+            LOG.info("Accident was found successfully");
+        } else {
+            LOG.error("Accident wasn`t found. Empty accident was returned");
+        }
+        return nonNullAccident;
+    }
+
     public List<Accident> findAllJDBC() {
         List<Accident> filledAccidentList = accidentJDBCRepostiory.getAllAccidents();
         if (!(filledAccidentList.size() == 0)) {
@@ -47,6 +64,22 @@ public class AccidentService {
             LOG.error("Accidents wasn`t found. Empty list of accidents was returned");
         }
         return filledAccidentList;
+    }
+
+    public boolean saveHBM(Accident accident, int[] ids) {
+        boolean rsl = false;
+        Optional<AccidentType> type = accidentTypeHBMRep.findById(accident.getAccidentType().getId());
+        Set<Rule> rules = accidentRuleHBMRep.getRequiredRules(ids);
+        if (type.isPresent() || rules.size() > 0) {
+            accident.setAccidentType(type.get());
+            accident.setRules(rules);
+            accidentHBMRep.save(accident);
+            LOG.info("Accident was saved successfully");
+            rsl = true;
+        } else {
+            LOG.error("Accident wasn`t saved");
+        }
+        return rsl;
     }
 
     public Optional<Accident> findByIdWithJDBC(int accidentId) {

@@ -35,7 +35,7 @@ public class AccidentHBMRep {
             WHERE a.id = :fId
             """;
 
-    public void add(Accident accident) {
+    public void save(Accident accident) {
         crudRepository.run(session -> session.save(accident));
     }
 

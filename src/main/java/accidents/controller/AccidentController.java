@@ -30,7 +30,7 @@ public class AccidentController {
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> accidentTypes = accidentTypeService.findAllWithJDBC();
+        List<AccidentType> accidentTypes = accidentTypeService.findAllWithHBM();
         model.addAttribute("accidentTypes", accidentTypes);
         List<Rule> rules = accidentRuleService.findAllRulesJDBC();
         model.addAttribute("rules", rules);
@@ -47,19 +47,13 @@ public class AccidentController {
         return rsl;
     }
 
-    /**TODO INFO PAGE
-     *
-     * @param model
-     * @param id
-     * @return
-     */
     @GetMapping("/search")
     public String formAccidentInfo() {
         return "/accidents/findAccident";
     }
 
     @GetMapping("/info/{id}")
-    public String AccidentInfo(Model model, @PathVariable("id") int id) {
+    public String accidentInfo(Model model, @PathVariable("id") int id) {
         Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
         accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
         return "/accidents/accident";

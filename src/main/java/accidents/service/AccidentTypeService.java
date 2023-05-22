@@ -1,6 +1,7 @@
 package accidents.service;
 
 import accidents.model.AccidentType;
+import accidents.repository.hbm.AccidentTypeHBMRep;
 import accidents.repository.inmemory.AccidentTypeMem;
 import accidents.repository.jdbc.AccidentTypeJdbcRep;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,31 @@ public class AccidentTypeService {
 
     private final AccidentTypeMem accidentTypeMem;
     private final AccidentTypeJdbcRep accidentTypeJdbcRep;
+    private final AccidentTypeHBMRep accidentTypeHBMRep;
 
     private static final Logger LOG = LoggerFactory.getLogger(AccidentTypeService.class.getName());
+
+    public List<AccidentType> findAllWithHBM() {
+        List<AccidentType> filledTypeList = accidentTypeHBMRep.findAll();
+        if (!(filledTypeList.size() == 0)) {
+            LOG.info("Types was founded successfully");
+        } else {
+            LOG.error("Types wasn`t found. Empty list of accident type was returned");
+        }
+        return filledTypeList;
+    }
+
+    public AccidentType findByIdWithHBM(int id) {
+        AccidentType existType = new AccidentType();
+        Optional<AccidentType> nonNullType = accidentTypeHBMRep.findById(id);
+        if (nonNullType.isPresent()) {
+            existType = nonNullType.get();
+            LOG.info("Type was found successfully");
+        } else {
+            LOG.error("Type wasn`t found. Empty accident type was returned");
+        }
+        return existType;
+    }
 
     public List<AccidentType> findAllWithJDBC() {
         List<AccidentType> filledTypeList = accidentTypeJdbcRep.getAll();

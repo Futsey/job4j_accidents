@@ -2,6 +2,7 @@ package accidents.service;
 
 import accidents.model.Accident;
 import accidents.model.Rule;
+import accidents.repository.hbm.AccidentRuleHBMRep;
 import accidents.repository.inmemory.RuleMem;
 import accidents.repository.jdbc.AccidentRuleJdbcRep;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,31 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AccidentRuleService {
 
+    private final AccidentRuleHBMRep accidentRuleHBMRep;
     private final AccidentRuleJdbcRep accidentRuleJdbcRep;
     private final RuleMem ruleMem;
 
     private static final Logger LOG = LoggerFactory.getLogger(AccidentRuleService.class.getName());
 
+    public List<Rule> findAllRulesHBM() {
+        List<Rule> filledRuleList = accidentRuleHBMRep.getAll();
+        if (!(filledRuleList.size() == 0)) {
+            LOG.info("Rules was founded successfully");
+        } else {
+            LOG.error("Rules wasn`t found. Empty list of rules was returned");
+        }
+        return filledRuleList;
+    }
+
+    public Set<Rule> findRequiredRulesWithHBM(int accidentId) {
+        Set<Rule> filledRuleSet = accidentRuleHBMRep.getRequiredRules(accidentId);
+        if (!(filledRuleSet.size() == 0)) {
+            LOG.info("Rules was founded successfully");
+        } else {
+            LOG.error("Rules wasn`t found. Empty set of rules was returned");
+        }
+        return filledRuleSet;
+    }
 
     public List<Rule> findAllRulesJDBC() {
         List<Rule> filledRuleList = accidentRuleJdbcRep.getAll();
