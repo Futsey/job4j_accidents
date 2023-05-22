@@ -32,15 +32,15 @@ public class AccidentController {
     public String viewCreateAccident(Model model) {
         List<AccidentType> accidentTypes = accidentTypeService.findAllWithHBM();
         model.addAttribute("accidentTypes", accidentTypes);
-        List<Rule> rules = accidentRuleService.findAllRulesJDBC();
+        List<Rule> rules = accidentRuleService.findAllRulesHBM();
         model.addAttribute("rules", rules);
         return "/accidents/createAccident";
     }
 
     @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident, Model model, @RequestParam("rIds") int[] ids) {
+    public String save(@ModelAttribute Accident accident, Model model, @RequestParam("rIds") Integer[] ids) {
         String rsl = "redirect:/accidents";
-        if (!accidentService.saveJDBC(accident, ids)) {
+        if (!accidentService.saveHBM(accident, ids)) {
             model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";
         }
@@ -54,7 +54,7 @@ public class AccidentController {
 
     @GetMapping("/info/{id}")
     public String accidentInfo(Model model, @PathVariable("id") int id) {
-        Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
+        Optional<Accident> accidentInDB = accidentService.findByIdWithHBM(id);
         accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
         return "/accidents/accident";
     }
@@ -62,12 +62,12 @@ public class AccidentController {
     @GetMapping("/edit/{id}")
     public String formUpdateAccident(Model model, @PathVariable("id") int id) {
         String rsl = "/accidents/editAccident";
-        Optional<Accident> accidentInDB = accidentService.findByIdWithJDBC(id);
+        Optional<Accident> accidentInDB = accidentService.findByIdWithHBM(id);
         if (accidentInDB.isPresent()) {
             model.addAttribute("accident", accidentInDB.get());
-            List<AccidentType> accidentTypes = accidentTypeService.findAllWithJDBC();
+            List<AccidentType> accidentTypes = accidentTypeService.findAllWithHBM();
             model.addAttribute("accidentTypes", accidentTypes);
-            List<Rule> rules = accidentRuleService.findAllRulesJDBC();
+            List<Rule> rules = accidentRuleService.findAllRulesHBM();
             model.addAttribute("rules", rules);
         } else {
             rsl = "/fail";
@@ -78,7 +78,7 @@ public class AccidentController {
     @PostMapping("/update")
     public String editAccident(@ModelAttribute Accident accident) {
         String rsl = "redirect:/accidents";
-        if (!accidentService.updateJDBC(accident)) {
+        if (!accidentService.updateHBM(accident)) {
             rsl = "/fail";
         }
         return rsl;
@@ -87,7 +87,7 @@ public class AccidentController {
     @GetMapping("/delete/{id}")
     public String deleteAccident(@PathVariable("id") int id) {
         String rsl = "redirect:/accidents";
-        if (!accidentService.deleteJDBC(id)) {
+        if (!accidentService.deleteHBM(id)) {
             rsl = "/fail";
         }
         return rsl;

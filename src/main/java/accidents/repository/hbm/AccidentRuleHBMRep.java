@@ -4,6 +4,7 @@ import accidents.model.Rule;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 @Repository
@@ -21,10 +22,20 @@ public class AccidentRuleHBMRep {
             WHERE r.id = :fId
             """;
 
-    private static final String FIND_REQUIRED_RULES = """
+    private static final String FIND_REQUIRED_RULES_BY_ACCIDENT = """
             FROM Rule r
             WHERE r.id
-            IN (:fId)
+            IN :fAccId
+            """;
+
+    private static final String FIND_REQUIRED_RULES_IN_ARRAY = """
+            SELECT r.id, r.name
+            FROM Rule r
+            WHERE r.id
+            IN (
+                SELECT ar.ruleId
+                FROM AccidentsRules ar
+                WHERE ar.accidentId = :fAccId)
             """;
 
     public List<Rule> getAll() {
@@ -38,18 +49,14 @@ public class AccidentRuleHBMRep {
         );
     }
 
-    public Set<Rule> getRequiredRules(int[] ids) {
-        Set<Rule> ruleHashSet = new HashSet<>();
-        for (int i = 0; i < ids.length; i++) {
-            ruleHashSet.add(getRuleById(ids[i]).get());
-        }
-        return ruleHashSet;
-
-    }
-
     public Set<Rule> getRequiredRules(int accidentId) {
         return new HashSet<>(crudRep.query(
-                FIND_REQUIRED_RULES, Rule.class,
-                Map.of("fId", accidentId)));
+                FIND_REQUIRED_RULES_BY_ACCIDENT, Rule.class,
+                Map.of("fAccId", accidentId)));
+    }
+
+    public Set<Rule> getRequiredRules(Integer[] ids) {
+        return new HashSet<>(crudRep.query(
+                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fAccId", ids)));
     }
 }

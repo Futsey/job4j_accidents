@@ -66,10 +66,11 @@ public class AccidentService {
         return filledAccidentList;
     }
 
-    public boolean saveHBM(Accident accident, int[] ids) {
+    public boolean saveHBM(Accident accident, Integer[] ids) {
         boolean rsl = false;
         Optional<AccidentType> type = accidentTypeHBMRep.findById(accident.getAccidentType().getId());
-        Set<Rule> rules = accidentRuleHBMRep.getRequiredRules(ids);
+        Set<Rule> rules;
+        rules = accidentRuleHBMRep.getRequiredRules(ids);
         if (type.isPresent() || rules.size() > 0) {
             accident.setAccidentType(type.get());
             accident.setRules(rules);
@@ -81,6 +82,7 @@ public class AccidentService {
         }
         return rsl;
     }
+
 
     public Optional<Accident> findByIdWithJDBC(int accidentId) {
         Optional<Accident> nonNullAccident = accidentJDBCRepostiory.findById(accidentId);
@@ -112,8 +114,16 @@ public class AccidentService {
         return accidentJDBCRepostiory.updateAccident(accident);
     }
 
+    public boolean updateHBM(Accident accident) {
+        return accidentHBMRep.update(accident);
+    }
+
     public boolean deleteJDBC(int id) {
         return accidentJDBCRepostiory.delete(id);
+    }
+
+    public boolean deleteHBM(int id) {
+        return accidentHBMRep.delete(id);
     }
 
     public List<Accident> findAll() {
