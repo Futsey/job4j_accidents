@@ -70,7 +70,7 @@ public class AccidentService {
         boolean rsl = false;
         Optional<AccidentType> type = accidentTypeHBMRep.findById(accident.getAccidentType().getId());
         Set<Rule> rules;
-        rules = accidentRuleHBMRep.getRequiredRules(ids);
+        rules = accidentRuleHBMRep.getRequiredRulesOldVers(ids);
         if (type.isPresent() || rules.size() > 0) {
             accident.setAccidentType(type.get());
             accident.setRules(rules);
