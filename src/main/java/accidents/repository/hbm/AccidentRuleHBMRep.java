@@ -2,10 +2,23 @@ package accidents.repository.hbm;
 
 import accidents.model.Rule;
 import lombok.AllArgsConstructor;
+import org.hibernate.*;
+import org.hibernate.Cache;
+import org.hibernate.boot.spi.SessionFactoryOptions;
+import org.hibernate.engine.spi.FilterDefinition;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.metadata.CollectionMetadata;
+import org.hibernate.stat.Statistics;
 import org.springframework.stereotype.Repository;
 
+import javax.naming.NamingException;
+import javax.naming.Reference;
+import javax.persistence.*;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
+import java.sql.Connection;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -29,13 +42,9 @@ public class AccidentRuleHBMRep {
             """;
 
     private static final String FIND_REQUIRED_RULES_IN_ARRAY = """
-            SELECT r.id, r.name
             FROM Rule r
             WHERE r.id
-            IN (
-                SELECT ar.ruleId
-                FROM AccidentsRules ar
-                WHERE ar.accidentId = :fAccId)
+            IN (:fRId)
             """;
 
     public List<Rule> getAll() {
@@ -55,8 +64,25 @@ public class AccidentRuleHBMRep {
                 Map.of("fAccId", accidentId)));
     }
 
-    public Set<Rule> getRequiredRules(Integer[] ids) {
+    public Set<Rule> getRequiredRulesOldVers(Integer[] ids) {
+        List<Integer> numbers = Arrays.asList(ids);
+        String tmpQuery = numbers.stream()
+                .map( n -> n.toString() )
+                .collect( Collectors.joining( "," ) );
         return new HashSet<>(crudRep.query(
-                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fAccId", ids)));
+                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fAccId", tmpQuery)));
+    }
+
+    public Set<Rule> getRequiredRulesTQVers(Integer[] ids) {
+        List<Integer> numbers = Arrays.asList(ids);
+        String tmpQuery = numbers.stream()
+                .map( n -> n.toString() )
+                .collect( Collectors.joining( "," ) );
+        TypedQuery<Rule> query = crudRep.typedQuery(
+                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class);
+        query.setParameter("fRId", tmpQuery);
+        List<Rule> result = query.getResultList();
+        System.out.println();
+        return new HashSet<>(result);
     }
 }

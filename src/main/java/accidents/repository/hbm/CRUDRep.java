@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -59,6 +60,12 @@ public class CRUDRep {
         Function<Session, List<T>> command = session -> session
                 .createQuery(query, cl)
                 .list();
+        return tx(command);
+    }
+
+    public <T> TypedQuery<T> typedQuery(String query, Class<T> cl) {
+        Function<Session, TypedQuery<T>> command = session -> session
+                .createQuery(query, cl);
         return tx(command);
     }
 
