@@ -2,21 +2,9 @@ package accidents.repository.hbm;
 
 import accidents.model.Rule;
 import lombok.AllArgsConstructor;
-import org.hibernate.*;
-import org.hibernate.Cache;
-import org.hibernate.boot.spi.SessionFactoryOptions;
-import org.hibernate.engine.spi.FilterDefinition;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.metadata.CollectionMetadata;
-import org.hibernate.stat.Statistics;
 import org.springframework.stereotype.Repository;
 
-import javax.naming.NamingException;
-import javax.naming.Reference;
 import javax.persistence.*;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import java.sql.Connection;
 import java.util.*;
 import java.util.stream.Collectors;
 
