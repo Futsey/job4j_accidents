@@ -67,8 +67,8 @@ public class AccidentRuleHBMRep {
     public Set<Rule> getRequiredRulesOldVers(Integer[] ids) {
         List<Integer> numbers = Arrays.asList(ids);
         String tmpQuery = numbers.stream()
-                .map( n -> n.toString() )
-                .collect( Collectors.joining( "," ) );
+                .map(n -> n.toString())
+                .collect(Collectors.joining(","));
         return new HashSet<>(crudRep.query(
                 FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fAccId", tmpQuery)));
     }
@@ -76,8 +76,8 @@ public class AccidentRuleHBMRep {
     public Set<Rule> getRequiredRulesTQVers(Integer[] ids) {
         List<Integer> numbers = Arrays.asList(ids);
         String tmpQuery = numbers.stream()
-                .map( n -> n.toString() )
-                .collect( Collectors.joining( "," ) );
+                .map(n -> n.toString())
+                .collect(Collectors.joining(","));
         TypedQuery<Rule> query = crudRep.typedQuery(
                 FIND_REQUIRED_RULES_IN_ARRAY, Rule.class);
         query.setParameter("fRId", tmpQuery);
