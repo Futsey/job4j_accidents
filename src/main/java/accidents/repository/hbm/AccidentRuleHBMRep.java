@@ -57,20 +57,8 @@ public class AccidentRuleHBMRep {
         String tmpQuery = numbers.stream()
                 .map(n -> n.toString())
                 .collect(Collectors.joining(","));
+        Integer intQuery = Integer.parseInt(tmpQuery);
         return new HashSet<>(crudRep.query(
-                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fAccId", tmpQuery)));
-    }
-
-    public Set<Rule> getRequiredRulesTQVers(Integer[] ids) {
-        List<Integer> numbers = Arrays.asList(ids);
-        String tmpQuery = numbers.stream()
-                .map(n -> n.toString())
-                .collect(Collectors.joining(","));
-        TypedQuery<Rule> query = crudRep.typedQuery(
-                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class);
-        query.setParameter("fRId", tmpQuery);
-        List<Rule> result = query.getResultList();
-        System.out.println();
-        return new HashSet<>(result);
+                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fRId", intQuery)));
     }
 }
