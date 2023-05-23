@@ -54,11 +54,7 @@ public class AccidentRuleHBMRep {
 
     public Set<Rule> getRequiredRulesOldVers(Integer[] ids) {
         List<Integer> numbers = Arrays.asList(ids);
-        String tmpQuery = numbers.stream()
-                .map(n -> n.toString())
-                .collect(Collectors.joining(","));
-        Integer intQuery = Integer.parseInt(tmpQuery);
         return new HashSet<>(crudRep.query(
-                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fRId", intQuery)));
+                FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fRId", numbers)));
     }
 }

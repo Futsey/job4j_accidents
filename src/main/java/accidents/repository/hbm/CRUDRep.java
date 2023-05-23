@@ -63,12 +63,6 @@ public class CRUDRep {
         return tx(command);
     }
 
-    public <T> TypedQuery<T> typedQuery(String query, Class<T> cl) {
-        Function<Session, TypedQuery<T>> command = session -> session
-                .createQuery(query, cl);
-        return tx(command);
-    }
-
     public <T> List<T> query(String query, Class<T> cl, Map<String, Object> args) {
         Function<Session, List<T>> command = session -> {
             var sq = session
