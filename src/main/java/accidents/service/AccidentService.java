@@ -45,7 +45,7 @@ public class AccidentService {
     private static final Logger LOG = LoggerFactory.getLogger(AccidentService.class.getName());
 
     public List<Accident> findAllSData() {
-        return (List<Accident>) accidentDataRep.findAll();
+        return accidentDataRep.findAll();
     }
 
     public Optional<Accident> findByIdSData(int accidentId) {
@@ -112,7 +112,7 @@ public class AccidentService {
         boolean rsl = false;
         Optional<AccidentType> type = accidentTypeHBMRep.findById(accident.getAccidentType().getId());
         Set<Rule> rules;
-        rules = accidentRuleHBMRep.getRequiredRulesOldVers(ids);
+        rules = accidentRuleHBMRep.getRequiredRulesInArray(ids);
         if (type.isPresent() || rules.size() > 0) {
             accident.setAccidentType(type.get());
             accident.setRules(rules);
@@ -156,7 +156,8 @@ public class AccidentService {
         return accidentJDBCRepostiory.updateAccident(accident);
     }
 
-    public boolean updateHBM(Accident accident) {
+    public boolean updateHBM(Accident accident, Integer[] ids) {
+        accident.setRules(accidentRuleService.findRequiredRulesWithHBM(ids));
         return accidentHBMRep.update(accident);
     }
 

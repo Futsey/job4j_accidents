@@ -56,6 +56,16 @@ public class AccidentRuleService {
         return filledRuleSet;
     }
 
+    public Set<Rule> findRequiredRulesWithHBM(Integer[] ids) {
+        Set<Rule> filledRuleSet = accidentRuleHBMRep.getRequiredRulesInArray(ids);
+        if (!(filledRuleSet.size() == 0)) {
+            LOG.info("Rules was founded successfully");
+        } else {
+            LOG.error("Rules wasn`t found. Empty set of rules was returned");
+        }
+        return filledRuleSet;
+    }
+
     public List<Rule> findAllRulesJDBC() {
         List<Rule> filledRuleList = accidentRuleJdbcRep.getAll();
         if (!(filledRuleList.size() == 0)) {

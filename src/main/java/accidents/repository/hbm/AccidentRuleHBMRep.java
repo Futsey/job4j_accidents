@@ -4,9 +4,7 @@ import accidents.model.Rule;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -52,7 +50,7 @@ public class AccidentRuleHBMRep {
                 Map.of("fAccId", accidentId)));
     }
 
-    public Set<Rule> getRequiredRulesOldVers(Integer[] ids) {
+    public Set<Rule> getRequiredRulesInArray(Integer[] ids) {
         List<Integer> numbers = Arrays.asList(ids);
         return new HashSet<>(crudRep.query(
                 FIND_REQUIRED_RULES_IN_ARRAY, Rule.class, Map.of("fRId", numbers)));

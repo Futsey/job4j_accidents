@@ -19,9 +19,9 @@ public class AccidentHBMRep {
     private static final Logger LOG = LoggerFactory.getLogger(AccidentHBMRep.class.getName());
 
     private static final String SELECT_ALL_WITH_TYPE_AND_RULES = """
-            FROM Accident AS a
-            JOIN FETCH a.accidentType
-            JOIN FETCH a.rules
+            SELECT DISTINCT a FROM Accident AS a
+            LEFT JOIN FETCH a.accidentType
+            LEFT JOIN FETCH a.rules
             """;
     private static final String SELECT_BY_ID = """
             FROM Accident AS a
