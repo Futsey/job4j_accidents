@@ -4,6 +4,7 @@ import accidents.model.Accident;
 
 import accidents.model.AccidentType;
 import accidents.model.Rule;
+import accidents.repository.data.AccidentDataRep;
 import accidents.repository.hbm.AccidentHBMRep;
 import accidents.repository.hbm.AccidentRuleHBMRep;
 import accidents.repository.hbm.AccidentTypeHBMRep;
@@ -26,6 +27,8 @@ public class AccidentService {
 
     private final AccidentHBMRep accidentHBMRep;
 
+    private final AccidentDataRep accidentDataRep;
+
     private final AccidentRuleHBMRep accidentRuleHBMRep;
     private final AccidentTypeHBMRep accidentTypeHBMRep;
 
@@ -35,6 +38,24 @@ public class AccidentService {
     private final AccidentMem accidentMem;
 
     private static final Logger LOG = LoggerFactory.getLogger(AccidentService.class.getName());
+
+    public List<Accident> findAllSData() {
+        return (List<Accident>) accidentDataRep.findAll();
+    }
+
+    public Optional<Accident> findByIdSData(int accidentId) {
+        Optional<Accident> nonNullAccident = accidentDataRep.findById(accidentId);
+        if (nonNullAccident.isPresent()) {
+            LOG.info("Accident was found successfully");
+        } else {
+            LOG.error("Accident wasn`t found. Empty accident was returned");
+        }
+        return nonNullAccident;
+    }
+
+    public void deleteSData(int id) {
+        accidentDataRep.delete(Accident.builder().id(id).build());
+    }
 
     public List<Accident> findAllHBM() {
         List<Accident> filledAccidentList = accidentHBMRep.getAll();

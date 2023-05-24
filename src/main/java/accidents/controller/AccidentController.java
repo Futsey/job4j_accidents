@@ -24,7 +24,7 @@ public class AccidentController {
 
     @GetMapping()
     public String showAll(Model model) {
-        model.addAttribute("accidents", accidentService.findAllHBM());
+        model.addAttribute("accidents", accidentService.findAllSData());
         return "accidents/accidents";
     }
 
