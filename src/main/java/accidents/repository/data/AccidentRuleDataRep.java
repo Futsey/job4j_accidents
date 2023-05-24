@@ -15,10 +15,10 @@ public interface AccidentRuleDataRep extends CrudRepository<Accident, Integer> {
     List<Rule> findAllRules();
 
     @Query("FROM Rule r WHERE r.id IN :accidentId")
-    public Set<Rule> getRequiredRules(int accidentId);
+    Set<Rule> getRequiredRules(int accidentId);
 
     @Query("FROM Rule r WHERE r.id IN :ids")
-    public Set<Rule> getRequiredRulesOldVers(Integer[] ids);
+    Set<Rule> getRequiredRulesOldVers(Integer[] ids);
 }
 
 

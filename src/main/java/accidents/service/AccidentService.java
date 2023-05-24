@@ -49,7 +49,7 @@ public class AccidentService {
     }
 
     public Optional<Accident> findByIdSData(int accidentId) {
-        Optional<Accident> nonNullAccident = Optional.ofNullable(accidentDataRep.findById(accidentId));
+        Optional<Accident> nonNullAccident = accidentDataRep.findById(accidentId);
         if (nonNullAccident.isPresent()) {
             LOG.info("Accident was found successfully");
         } else {
