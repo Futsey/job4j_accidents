@@ -30,9 +30,9 @@ public class AccidentController {
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> accidentTypes = accidentTypeService.findAllWithHBM();
+        List<AccidentType> accidentTypes = accidentTypeService.findAllSData();
         model.addAttribute("accidentTypes", accidentTypes);
-        List<Rule> rules = accidentRuleService.findAllRulesHBM();
+        List<Rule> rules = accidentRuleService.findAllRulesSData();
         model.addAttribute("rules", rules);
         return "/accidents/createAccident";
     }
@@ -40,7 +40,7 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, Model model, @RequestParam("rIds") Integer[] ids) {
         String rsl = "redirect:/accidents";
-        if (!accidentService.saveHBM(accident, ids)) {
+        if (!accidentService.saveSData(accident, ids)) {
             model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";
         }

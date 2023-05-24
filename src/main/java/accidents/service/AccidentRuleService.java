@@ -2,6 +2,8 @@ package accidents.service;
 
 import accidents.model.Accident;
 import accidents.model.Rule;
+import accidents.repository.data.AccidentDataRep;
+import accidents.repository.data.AccidentRuleDataRep;
 import accidents.repository.hbm.AccidentRuleHBMRep;
 import accidents.repository.inmemory.RuleMem;
 import accidents.repository.jdbc.AccidentRuleJdbcRep;
@@ -17,11 +19,22 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AccidentRuleService {
 
+    private final AccidentRuleDataRep accidentRuleDataRep;
     private final AccidentRuleHBMRep accidentRuleHBMRep;
     private final AccidentRuleJdbcRep accidentRuleJdbcRep;
     private final RuleMem ruleMem;
 
     private static final Logger LOG = LoggerFactory.getLogger(AccidentRuleService.class.getName());
+
+    public List<Rule> findAllRulesSData() {
+        List<Rule> filledRuleList = accidentRuleDataRep.findAllRules();
+        if (!(filledRuleList.size() == 0)) {
+            LOG.info("Rules was founded successfully");
+        } else {
+            LOG.error("Rules wasn`t found. Empty list of rules was returned");
+        }
+        return filledRuleList;
+    }
 
     public List<Rule> findAllRulesHBM() {
         List<Rule> filledRuleList = accidentRuleHBMRep.getAll();

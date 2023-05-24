@@ -5,6 +5,8 @@ import accidents.model.Accident;
 import accidents.model.AccidentType;
 import accidents.model.Rule;
 import accidents.repository.data.AccidentDataRep;
+import accidents.repository.data.AccidentRuleDataRep;
+import accidents.repository.data.AccidentTypeDataRep;
 import accidents.repository.hbm.AccidentHBMRep;
 import accidents.repository.hbm.AccidentRuleHBMRep;
 import accidents.repository.hbm.AccidentTypeHBMRep;
@@ -29,6 +31,9 @@ public class AccidentService {
 
     private final AccidentDataRep accidentDataRep;
 
+    private final AccidentTypeDataRep accidentTypeDataRep;
+    private final AccidentRuleDataRep accidentRuleDataRep;
+
     private final AccidentRuleHBMRep accidentRuleHBMRep;
     private final AccidentTypeHBMRep accidentTypeHBMRep;
 
@@ -44,13 +49,29 @@ public class AccidentService {
     }
 
     public Optional<Accident> findByIdSData(int accidentId) {
-        Optional<Accident> nonNullAccident = accidentDataRep.findById(accidentId);
+        Optional<Accident> nonNullAccident = Optional.ofNullable(accidentDataRep.findById(accidentId));
         if (nonNullAccident.isPresent()) {
             LOG.info("Accident was found successfully");
         } else {
             LOG.error("Accident wasn`t found. Empty accident was returned");
         }
         return nonNullAccident;
+    }
+
+    public boolean saveSData(Accident accident, Integer[] ids) {
+        boolean rsl = false;
+        Optional<AccidentType> type = accidentTypeDataRep.findById(accident.getAccidentType().getId());
+        Set<Rule> rules = accidentRuleDataRep.getRequiredRulesOldVers(ids);
+        if (type.isPresent() || rules.size() > 0) {
+            accident.setAccidentType(type.get());
+            accident.setRules(rules);
+            accidentDataRep.save(accident);
+            LOG.info("Accident was saved successfully");
+            rsl = true;
+        } else {
+            LOG.error("Accident wasn`t saved");
+        }
+        return rsl;
     }
 
     public void deleteSData(int id) {
