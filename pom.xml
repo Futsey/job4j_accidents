@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.6</version>
+        <version>2.7.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <spring.version>5.1.2.RELEASE</spring.version>
-        <spring.security.version>5.6.7</spring.security.version>
+        <spring.security.version>5.7.7</spring.security.version>
         <hibernate.version>5.6.11.Final</hibernate.version>
     </properties>
 
@@ -90,7 +90,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
+            <version>5.3.23</version>
         </dependency>
 
         <dependency>
