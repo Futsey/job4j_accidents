@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "accidents_users")
+@Table(name = "users")
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,5 +19,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "username")
     private String name;
+
+    private String password;
+    private boolean enabled;
 }
