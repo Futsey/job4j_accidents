@@ -1,41 +1,38 @@
 package accidents.controller;
 
 import accidents.model.User;
-import accidents.repository.security.AuthorityRepository;
-import accidents.repository.security.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import accidents.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
+@AllArgsConstructor
 public class RegControl {
 
-    private final PasswordEncoder encoder;
-    private final UserRepository users;
-    private final AuthorityRepository authorities;
-
-    public RegControl(PasswordEncoder encoder, UserRepository users, AuthorityRepository authorities) {
-        this.encoder = encoder;
-        this.users = users;
-        this.authorities = authorities;
-    }
+    private final UserService userService;
 
     @GetMapping("/registration")
-    public String regPage() {
+    public String regPage(@RequestParam(value = "login", required = false) String login, Model model) {
+        String ifEmptyName = "Field name must be not empty";
+        if (login != null) {
+            model.addAttribute("errorMessage", ifEmptyName);
+        }
         return "users/reg";
     }
 
     @PostMapping("/reg")
-    public String regSave(@ModelAttribute User user) {
-        user.setEnabled(true);
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setAuthority(authorities.findByAuthority("ROLE_USER"));
-        users.save(user);
-        System.out.println(users.findAll());
+    public String regSave(@ModelAttribute User user, Model model) {
+        String ifUserExist = "User already exists";
+        if(userService.findByName(user.getName())) {
+            model.addAttribute("errorMessage", ifUserExist);
+        } else {
+            userService.saveSData(user);
+        }
         return "redirect:users/login";
     }
 }
