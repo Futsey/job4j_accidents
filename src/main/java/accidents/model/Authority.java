@@ -8,24 +8,16 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "authorities")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Authority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username")
-    private String name;
-
-    private String password;
-    private boolean enabled;
-
-    @ManyToOne
-    @JoinColumn(name = "authority_id")
-    private Authority authority;
+    private String authority;
 }
