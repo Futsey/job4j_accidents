@@ -54,9 +54,13 @@ public class AccidentController {
 
     @GetMapping("/info/{id}")
     public String accidentInfo(Model model, @PathVariable("id") int id) {
+        String rsl = "/accidents/fail";
         Optional<Accident> accidentInDB = accidentService.findByIdWithHBM(id);
-        accidentInDB.ifPresent(accident -> model.addAttribute("accident", accident));
-        return "/accidents/accident";
+        if (accidentInDB.isPresent()) {
+            model.addAttribute("accident", accidentInDB.get());
+            rsl = "redirect:/accidents/accident";
+        }
+        return rsl;
     }
 
     @GetMapping("/edit/{id}")
@@ -70,7 +74,7 @@ public class AccidentController {
             List<Rule> rules = accidentRuleService.findAllRulesHBM();
             model.addAttribute("rules", rules);
         } else {
-            rsl = "/fail";
+            rsl = "/accidents/fail";
         }
         return rsl;
     }
@@ -79,7 +83,7 @@ public class AccidentController {
     public String editAccident(@ModelAttribute Accident accident, @RequestParam("rIds") Integer[] ids) {
         String rsl = "redirect:/accidents";
         if (!accidentService.updateHBM(accident, ids)) {
-            rsl = "/fail";
+            rsl = "/accidents/fail";
         }
         return rsl;
     }
@@ -88,7 +92,7 @@ public class AccidentController {
     public String deleteAccident(@PathVariable("id") int id) {
         String rsl = "redirect:/accidents";
         if (!accidentService.deleteHBM(id)) {
-            rsl = "/fail";
+            rsl = "/accidents/fail";
         }
         return rsl;
     }

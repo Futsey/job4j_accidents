@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/users")
 @AllArgsConstructor
@@ -22,7 +20,7 @@ public class RegControl {
         if (login != null) {
             model.addAttribute("errorMessage", ifEmptyName);
         }
-        return "users/reg";
+        return "/users/reg";
     }
 
     @PostMapping("/reg")
