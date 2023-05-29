@@ -28,7 +28,7 @@ public class RegControl {
     @PostMapping("/reg")
     public String regSave(@ModelAttribute User user, Model model) {
         String ifUserExist = "User already exists";
-        if(userService.findByName(user.getName())) {
+        if (userService.findByName(user.getName())) {
             model.addAttribute("errorMessage", ifUserExist);
         } else {
             userService.saveSData(user);
