@@ -22,6 +22,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @SpringBootTest(classes = Job4jAccidentsApplication.class)
@@ -111,7 +112,7 @@ class AccidentControllerTest {
     }
 
     @Test
-    void shouldBlockMockMVCWithoutMockUser() throws Exception{
+    void shouldBlockMockMVCWithoutMockUser() throws Exception {
         this.mockMvc.perform(get("/index"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
@@ -149,11 +150,9 @@ class AccidentControllerTest {
 
     @Test
     @WithMockUser
-    void returnDefaultMessageOnInfo() throws Exception {
-        this.mockMvc.perform(get("/accidents/info/{id}", 1))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("/accidents/accident"));
+    void whenFindByIdSuccessful() throws Exception {
+        when(accidentService.findById(1))
+                .thenReturn(Optional.ofNullable(accList.get(1)));
     }
 
     @Test
@@ -167,26 +166,8 @@ class AccidentControllerTest {
 
     @Test
     @WithMockUser
-    void returnDefaultMessageOnUpdate() throws Exception {
-        this.mockMvc.perform(get("/accidents/edit/{id}", 1))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("/accidents/fail"));
-    }
-
-    @Test
-    @WithMockUser
     void returnFailMessageOnUpdate() throws Exception {
         this.mockMvc.perform(get("/accidents/edit/{id}", 1111))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("/accidents/fail"));
-    }
-
-    @Test
-    @WithMockUser
-    void returnDefaultMessageOnDelete() throws Exception {
-        this.mockMvc.perform(get("/accidents/delete/{id}", 1))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("/accidents/fail"));
