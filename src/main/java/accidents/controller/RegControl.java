@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/users")
 @AllArgsConstructor
@@ -26,10 +28,9 @@ public class RegControl {
     @PostMapping("/reg")
     public String regSave(@ModelAttribute User user, Model model) {
         String ifUserExist = "User already exists";
-        if (userService.findByName(user.getName())) {
+        Optional<User> nonNullUser = userService.saveSData(user);
+        if (nonNullUser.isEmpty()) {
             model.addAttribute("errorMessage", ifUserExist);
-        } else {
-            userService.saveSData(user);
         }
         return "redirect:users/login";
     }

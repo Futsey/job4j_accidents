@@ -37,17 +37,17 @@ public class UserService {
         return nonNullUser;
     }
 
-    public boolean saveSData(User user) {
-        boolean rsl = false;
-        if (user.getName() != null) {
-            user.setEnabled(true);
-            user.setPassword(encoder.encode(user.getPassword()));
-            user.setAuthority(authorities.findByAuthority("ROLE_USER"));
+    public Optional<User> saveSData(User user) {
+        Optional<User> rsl = Optional.empty();
+        user.setEnabled(true);
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setAuthority(authorities.findByAuthority("ROLE_USER"));
+        try {
             users.save(user);
+            rsl = Optional.of(user);
             LOG.info("User was saved successfully");
-            rsl = true;
-        } else {
-            LOG.error("User wasn`t saved");
+        } catch (Exception e) {
+            LOG.error("User wasn`t saved. Exception: " + e);
         }
         return rsl;
     }
