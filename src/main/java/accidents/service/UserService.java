@@ -37,10 +37,6 @@ public class UserService {
         return nonNullUser;
     }
 
-    public boolean findByName(String name) {
-        return users.findByName(name).isPresent();
-    }
-
     public boolean saveSData(User user) {
         boolean rsl = false;
         if (user.getName() != null) {
@@ -57,4 +53,7 @@ public class UserService {
     }
 
 
+    public boolean findByName(String name) {
+        return users.findByName(name);
+    }
 }
