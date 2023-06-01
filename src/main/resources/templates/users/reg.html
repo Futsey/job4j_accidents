@@ -25,7 +25,8 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/accidents/createAccident}">Add accident</a></li>
                 <li class="nav-item"></li>
                 <li class="nav-item"></li>
-            </ul><a class="btn btn-primary shadow" role="button" href="signup.html" style="font-size: 10px;color: rgb(6,13,84);background: rgb(255,255,255);">Log in</a><a class="btn btn-primary shadow" role="button" href="signup.html" style="font-size: 10px;background: rgb(19,39,106);border-radius: 26px;">Sign up</a>
+                <a class="btn btn-primary shadow" role="button" th:href="@{/login}" style="font-size: 10px;color: rgb(6,13,84);background: rgb(255,255,255);">Log in</a>
+                <a class="btn btn-primary shadow" role="button" th:href="@{/users/registration}" style="font-size: 10px;background: rgb(19,39,106);border-radius: 26px;">Sign up</a>
         </div>
     </div>
 </nav>
@@ -41,6 +42,9 @@
     <div class="container d-flex justify-content-center">
         <div class="card text-center shadow" style="width: 60rem;">
             <div class="card-body">
+                <div th:if="${fail}" class="alert alert-danger" role="alert">
+                    Field name can`t be empty or user already exists
+                </div>
                 <form th:action="@{/users/reg}" method="POST">
                     <div class="row d-flex justify-content-center">
                         <div class="input-group" style="width: 30rem; margin-top: 25px; margin-bottom: 5px">

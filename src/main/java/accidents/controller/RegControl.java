@@ -17,20 +17,17 @@ public class RegControl {
     private final UserService userService;
 
     @GetMapping("/registration")
-    public String regPage(@RequestParam(value = "login", required = false) String login, Model model) {
-        String ifEmptyName = "Field name must be not empty";
-        if (login != null) {
-            model.addAttribute("errorMessage", ifEmptyName);
-        }
-        return "/users/reg";
+
+    public String regPage(Model model, @RequestParam(name = "errorMessage", required = false) Boolean fail) {
+        model.addAttribute("fail", fail != null);
+        return "users/reg";
     }
 
     @PostMapping("/reg")
     public String regSave(@ModelAttribute User user, Model model) {
-        String ifUserExist = "User already exists";
         Optional<User> nonNullUser = userService.saveSData(user);
-        if (nonNullUser.isEmpty()) {
-            model.addAttribute("errorMessage", ifUserExist);
+        if (nonNullUser.isEmpty() || user.getName().equals("")) {
+            return "redirect:/registration?error=true";
         }
         return "redirect:users/login";
     }

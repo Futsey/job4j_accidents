@@ -47,7 +47,7 @@ public class UserService {
             rsl = Optional.of(user);
             LOG.info("User was saved successfully");
         } catch (Exception e) {
-            LOG.error("User wasn`t saved. Exception: " + e);
+            LOG.error("User wasn`t saved. Exception: " + e, e);
         }
         return rsl;
     }
