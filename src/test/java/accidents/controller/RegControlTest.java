@@ -34,6 +34,6 @@ class RegControlTest {
         this.mockMvc.perform(get("/users/registration"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("/users/reg"));
+                .andExpect(view().name("users/reg"));
     }
 }
