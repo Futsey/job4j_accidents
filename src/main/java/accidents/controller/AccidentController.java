@@ -40,7 +40,8 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, Model model, @RequestParam("rIds") Integer[] ids) {
         String rsl = "redirect:/accidents";
-        if (!accidentService.saveHBM(accident, ids)) {
+        boolean isSaved = accidentService.saveHBM(accident, ids);
+        if (!isSaved) {
             model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";
         }

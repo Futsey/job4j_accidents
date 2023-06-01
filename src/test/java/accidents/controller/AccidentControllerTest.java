@@ -1,11 +1,15 @@
 package accidents.controller;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import accidents.Job4jAccidentsApplication;
 import accidents.model.Accident;
@@ -14,6 +18,8 @@ import accidents.model.Rule;
 import accidents.service.AccidentService;
 import org.junit.jupiter.api.Test;
 
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -180,5 +186,19 @@ class AccidentControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("/accidents/fail"));
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldReturnDefaultMessageWhenSaveAccident() throws Exception {
+        mockMvc.perform(post("/accidents/saveAccident")
+                        .param("name", "name1")
+                        .param("text", "text1")
+                        .param("address", "address1")
+                        .param("accidentType.id", "1")
+                        .param("rIds", "1", "2", "3"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("/accidents"));
     }
 }
