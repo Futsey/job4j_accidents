@@ -1,10 +1,7 @@
 package accidents.controller;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -18,8 +15,6 @@ import accidents.model.Rule;
 import accidents.service.AccidentService;
 import org.junit.jupiter.api.Test;
 
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -191,6 +186,10 @@ class AccidentControllerTest {
     @Test
     @WithMockUser
     public void shouldReturnDefaultMessageWhenSaveAccident() throws Exception {
+        testAcc.setRules(testRules);
+        when(accidentService.saveHBM(any(), any()))
+                .thenReturn(Optional.ofNullable(testAcc));
+
         mockMvc.perform(post("/accidents/saveAccident")
                         .param("name", "name1")
                         .param("text", "text1")
@@ -198,7 +197,25 @@ class AccidentControllerTest {
                         .param("accidentType.id", "1")
                         .param("rIds", "1", "2", "3"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("/accidents"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/accidents"));
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldReturnDefaultMessageWhenUpdateAccident() throws Exception {
+        testAcc.setRules(testRules);
+        when(accidentService.updateHBM(any(), any()))
+                .thenReturn(Optional.ofNullable(testAcc));
+
+        mockMvc.perform(post("/accidents/update")
+                        .param("name", "name2")
+                        .param("text", "text2")
+                        .param("address", "address2")
+                        .param("accidentType.id", "2")
+                        .param("rIds", "1", "2", "3"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/accidents"));
     }
 }

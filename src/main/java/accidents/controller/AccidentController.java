@@ -40,8 +40,7 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, Model model, @RequestParam("rIds") Integer[] ids) {
         String rsl = "redirect:/accidents";
-        boolean isSaved = accidentService.saveHBM(accident, ids);
-        if (!isSaved) {
+        if (accidentService.saveHBM(accident, ids).isEmpty()) {
             model.addAttribute("message", "Sorry, can`t create accident. Something went wrong");
             rsl = "/accidents/fail";
         }
@@ -83,7 +82,7 @@ public class AccidentController {
     @PostMapping("/update")
     public String editAccident(@ModelAttribute Accident accident, @RequestParam("rIds") Integer[] ids) {
         String rsl = "redirect:/accidents";
-        if (!accidentService.updateHBM(accident, ids)) {
+        if (accidentService.updateHBM(accident, ids).isEmpty()) {
             rsl = "/accidents/fail";
         }
         return rsl;

@@ -50,11 +50,11 @@ public class AccidentHBMRep {
         );
     }
 
-    public boolean update(Accident accident) {
-        boolean rsl = false;
+    public Optional<Accident> update(Accident accident) {
+        Optional<Accident> rsl = Optional.empty();
         if (findById(accident.getId()).isPresent()) {
             merge(accident);
-            rsl = true;
+            rsl = Optional.of(accident);
         }
         return rsl;
     }

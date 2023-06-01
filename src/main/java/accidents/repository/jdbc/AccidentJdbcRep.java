@@ -144,8 +144,8 @@ public class AccidentJdbcRep {
         return accidentRuleService.findRequiredRulesWithJDBC(accidentId);
     }
 
-    public boolean updateAccident(Accident accident) {
-        boolean rsl = false;
+    public Optional<Accident> updateAccident(Accident accident) {
+        Optional<Accident> rsl = Optional.empty();
         if (jdbc.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(UPDATE_ACCIDENT);
             ps.setString(1, accident.getName());
@@ -156,7 +156,7 @@ public class AccidentJdbcRep {
         }) > 0) {
             accident.setId(accident.getId());
             accident.setRules(getRulesInAccident(accident.getId()));
-            rsl = true;
+            rsl = Optional.of(accident);
         }
         return rsl;
     }

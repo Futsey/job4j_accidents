@@ -108,8 +108,8 @@ public class AccidentService {
         return filledAccidentList;
     }
 
-    public boolean saveHBM(Accident accident, Integer[] ids) {
-        boolean rsl = false;
+    public Optional<Accident> saveHBM(Accident accident, Integer[] ids) {
+        Optional<Accident> rsl = Optional.empty();
         Optional<AccidentType> type = accidentTypeHBMRep.findById(accident.getAccidentType().getId());
         Set<Rule> rules;
         rules = accidentRuleHBMRep.getRequiredRulesInArray(ids);
@@ -118,7 +118,7 @@ public class AccidentService {
             accident.setRules(rules);
             accidentHBMRep.save(accident);
             LOG.info("Accident was saved successfully");
-            rsl = true;
+            rsl = Optional.of(accident);
         } else {
             LOG.error("Accident wasn`t saved");
         }
@@ -152,11 +152,11 @@ public class AccidentService {
         return rsl;
     }
 
-    public boolean updateJDBC(Accident accident) {
+    public Optional<Accident> updateJDBC(Accident accident) {
         return accidentJDBCRepostiory.updateAccident(accident);
     }
 
-    public boolean updateHBM(Accident accident, Integer[] ids) {
+    public Optional<Accident> updateHBM(Accident accident, Integer[] ids) {
         accident.setRules(accidentRuleService.findRequiredRulesWithHBM(ids));
         return accidentHBMRep.update(accident);
     }
