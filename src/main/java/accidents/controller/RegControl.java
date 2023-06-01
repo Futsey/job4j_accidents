@@ -26,8 +26,8 @@ public class RegControl {
     @PostMapping("/reg")
     public String regSave(@ModelAttribute User user, Model model) {
         Optional<User> nonNullUser = userService.saveSData(user);
-        if (nonNullUser.isEmpty() || user.getName().equals("")) {
-            return "redirect:/registration?error=true";
+        if (nonNullUser.isEmpty() || "".equals(user.getName())) {
+            return "redirect:/users/registration?error=true";
         }
         return "redirect:users/login";
     }
